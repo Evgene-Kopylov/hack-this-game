@@ -20,6 +20,7 @@ pub struct MainUnit {
     shoot_timer: f32,
     shoot_delay: f32,
     shoot_range: f32,
+    tick: f32,
 }
 
 
@@ -41,7 +42,8 @@ impl MainUnit {
             projectiles: Vec::new(),
             shoot_timer: 0.,
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
-            shoot_range: MAIN_UNIT_SHOOT_RANGE
+            shoot_range: MAIN_UNIT_SHOOT_RANGE,
+            tick: 0.,
         }
     }
 
@@ -49,6 +51,13 @@ impl MainUnit {
     pub fn update(&mut self, dt: f32, mouse_position: Vec2, target_pos: (f32, f32), target_rad: f32
     ) -> (bool, f32) {
         self.shoot_timer += dt;
+        self.tick += dt;
+
+        if self.tick >= 0.4 {
+            info!("tick");
+            self.tick = 0.;
+        }
+
         // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {

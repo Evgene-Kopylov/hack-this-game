@@ -1,7 +1,5 @@
 use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::*;
-// use quad_url::*;
-// use urlencoding::{decode};
 
 
 mod settings;
