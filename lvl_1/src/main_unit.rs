@@ -1,7 +1,7 @@
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
-use quad_url::{get_hash, set_hash};
+use quad_url::{get_hash, set_hash, set_program_parameter};
 use urlencoding::decode;
 use crate::projectile::*;
 use crate::settings::*;
@@ -60,7 +60,7 @@ impl MainUnit {
             self.command = "";
 
             let rotation_angle = parse_parameter("rotation");
-            info!("{}", rotation_angle);
+            info!("rotation_angle {}", rotation_angle);
 
 
             let raw_url_hash = get_hash();
@@ -98,6 +98,8 @@ impl MainUnit {
 
             let wasm_says = format!("wasm_says: {:?} ", target_pos);
             set_hash(&*wasm_says);
+            let line = format!("({}, {})", target_pos.0, target_pos.1);
+            set_program_parameter("target_pos", line.as_str());
             self.tick = 0.;
             // info!("wasm: {}", wasm_says);
 
