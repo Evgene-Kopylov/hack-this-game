@@ -18,10 +18,10 @@ from typing import Optional
 
 def move_rectangle(input_value: (float, float) = None) -> Optional[str]:
     """
-    @param input_value: координаты квадрата
-    @return: Направление движения. Варианты: "Up", "Down", "Left", "Right"
+    @param input_value: 
+    @return: 
     """
-    return "Up"
+    return "Shoot"
 `);
 output.value = "Initializing...\n";
 

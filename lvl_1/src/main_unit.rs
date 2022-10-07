@@ -1,6 +1,8 @@
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
+use quad_url::{get_hash, set_hash};
+use urlencoding::decode;
 use crate::projectile::*;
 use crate::settings::*;
 
@@ -21,6 +23,7 @@ pub struct MainUnit {
     shoot_delay: f32,
     shoot_range: f32,
     tick: f32,
+    command: &'static str,
 }
 
 
@@ -44,6 +47,7 @@ impl MainUnit {
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
             tick: 0.,
+            command: "",
         }
     }
 
@@ -52,10 +56,45 @@ impl MainUnit {
     ) -> (bool, f32) {
         self.shoot_timer += dt;
         self.tick += dt;
-
         if self.tick >= 0.4 {
-            info!("tick");
+            self.command = "";
+
+            let raw_url_hash = get_hash();
+            let url_hash = decode(&*raw_url_hash)
+                .unwrap()
+                .to_string();
+            let hash_vec = url_hash
+                .split(' ')
+                .collect::<Vec<&str>>();
+
+            match hash_vec[0] {
+                "#wasm_says:" => {
+                    // info!("wasm_says");
+                },
+                "#js_says:" => {
+                    let js_says = hash_vec[1];
+                    info!("js_says: {}", js_says);
+
+                    match js_says {
+                        "Shoot" => {
+                            self.command = "Shoot";
+                        },
+                        _ => {}
+                    }
+
+                }
+                _ => info!("no match")
+            }
+
+
+
+            info!("{:?}", &hash_vec);
+
+            let wasm_says = format!("wasm_says: {} ", self.command);
+            set_hash(&*wasm_says);
             self.tick = 0.;
+            // info!("wasm: {}", wasm_says);
+
         }
 
         // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
@@ -106,7 +145,8 @@ impl MainUnit {
             self.rotation = (dy / dx).atan() - f32::to_radians(270.);
         }
 
-        if is_mouse_button_down(MouseButton::Left) && self.shoot_timer >= self.shoot_delay {
+        if (is_mouse_button_down(MouseButton::Left) || self.command == "Shoot")
+            && self.shoot_timer >= self.shoot_delay {
             let size = (
                 self.projectile_texture.width(), self.projectile_texture.height());
             let speed = self.speed * 3.;
