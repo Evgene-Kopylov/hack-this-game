@@ -5,7 +5,7 @@ use quad_url::{get_hash, set_hash};
 use urlencoding::decode;
 use crate::projectile::*;
 use crate::settings::*;
-
+use crate::utils::{parse_parameter};
 
 pub struct MainUnit {
     pub texture: Texture2D,
@@ -58,6 +58,10 @@ impl MainUnit {
         self.tick += dt;
         if self.tick >= 0.4 {
             self.command = "";
+
+            let rotation_angle = parse_parameter("rotation");
+            info!("{}", rotation_angle);
+
 
             let raw_url_hash = get_hash();
             let url_hash = decode(&*raw_url_hash)

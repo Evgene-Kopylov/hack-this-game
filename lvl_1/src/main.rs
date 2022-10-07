@@ -10,6 +10,7 @@ mod projectile;
 mod main_unit;
 mod target_unit;
 mod scene;
+mod utils;
 
 use main_unit::*;
 use crate::scene::Scene;
