@@ -54,15 +54,16 @@ let pyodideReadyPromise = main();
 // pass the editor value to the pyodide.runPython function and show the result in the output section
 async function evaluatePython() {
     let wasm_says = decodeURI(window.location.hash);
-    console.log(`js: ${wasm_says}`);
-    wasm_says = wasm_says.split(" ").slice(1);
+    console.log(`js: raw_wasm_say: ${wasm_says}`);
+    wasm_says = wasm_says.split(": ").slice(1);
+    console.log(`js: wasm_says: ${wasm_says}`);
 
     let pyodide = await pyodideReadyPromise;
   try {
     pyodide.runPython(`
       import io
       sys.stdout = io.StringIO()
-      input_value = (${wasm_says})
+      input_value = ${wasm_says}
       `);
     pyodide.runPython(`
 ${editor.getValue()}    

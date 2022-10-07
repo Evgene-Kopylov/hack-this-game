@@ -73,7 +73,7 @@ impl MainUnit {
                 },
                 "#js_says:" => {
                     let js_says = hash_vec[1];
-                    info!("js_says: {}", js_says);
+                    info!("wasm: js_says: {}", js_says);
 
                     match js_says {
                         "Shoot" => {
@@ -83,14 +83,16 @@ impl MainUnit {
                     }
 
                 }
-                _ => info!("no match")
+                _ => {
+                    // info!("no match")
+                }
             }
 
 
 
-            info!("{:?}", &hash_vec);
+            info!("wasm: {:?}", &hash_vec);
 
-            let wasm_says = format!("wasm_says: {} ", self.command);
+            let wasm_says = format!("wasm_says: {:?} ", target_pos);
             set_hash(&*wasm_says);
             self.tick = 0.;
             // info!("wasm: {}", wasm_says);
