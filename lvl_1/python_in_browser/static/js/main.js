@@ -16,9 +16,9 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 editor.setValue(`
 from typing import Optional
 
-def move_rectangle(input_value: (float, float) = None) -> Optional[str]:
+def move_rectangle(target_pos: (float, float) = None) -> Optional[str]:
     """
-    @param input_value: 
+    @param target_pos: 
     @return: 
     """
     return "Shoot"
@@ -54,15 +54,22 @@ let pyodideReadyPromise = main();
 // pass the editor value to the pyodide.runPython function and show the result in the output section
 async function evaluatePython() {
     let wasm_says = decodeURI(window.location.hash);
-    console.log(`js: raw_wasm_say: ${wasm_says}`);
+    // console.log(`js: raw_wasm_say: ${wasm_says}`);
     wasm_says = wasm_says.split(": ").slice(1);
-    console.log(`js: wasm_says: ${wasm_says}`);
+    // console.log(`js: wasm_says: ${wasm_says}`);
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const target_pos = decodeURI(urlParams.get('target_pos'));
+    console.log('target_pos = ' + target_pos);
 
     let pyodide = await pyodideReadyPromise;
   try {
     pyodide.runPython(`
       import io
       sys.stdout = io.StringIO()
+      
+      target_pos = ${target_pos}      
       input_value = ${wasm_says}
       `);
     pyodide.runPython(`

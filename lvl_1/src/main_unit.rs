@@ -60,7 +60,7 @@ impl MainUnit {
             self.command = "";
 
             let rotation_angle = parse_parameter("rotation");
-            info!("rotation_angle {}", rotation_angle);
+            // info!("rotation_angle {}", rotation_angle);
 
 
             let raw_url_hash = get_hash();
@@ -77,7 +77,7 @@ impl MainUnit {
                 },
                 "#js_says:" => {
                     let js_says = hash_vec[1];
-                    info!("wasm: js_says: {}", js_says);
+                    // info!("wasm: js_says: {}", js_says);
 
                     match js_says {
                         "Shoot" => {
@@ -94,7 +94,7 @@ impl MainUnit {
 
 
 
-            info!("wasm: {:?}", &hash_vec);
+            // info!("wasm: {:?}", &hash_vec);
 
             let wasm_says = format!("wasm_says: {:?} ", target_pos);
             set_hash(&*wasm_says);
