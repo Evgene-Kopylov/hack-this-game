@@ -13,7 +13,8 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
               matchBrackets: true,
             });
 // set the initial value of the editor
-editor.setValue(`
+editor.setValue(
+`
 from typing import Optional
 
 def function(target_pos: (float, float) = None) -> Optional[str]:
@@ -22,7 +23,8 @@ def function(target_pos: (float, float) = None) -> Optional[str]:
     @return: 
     """
     return "Shoot"
-`);
+`
+);
 output.value = "Initializing...\n";
 
 // Add pyodide returned value to the output
@@ -38,10 +40,12 @@ function clearHistory() {
 // init Pyodide and show sys.version when it's loaded successfully
 async function main() {
   let pyodide = await loadPyodide();
-  output.value = pyodide.runPython(`
-      import sys
-      sys.version
-  `);
+  output.value = pyodide.runPython(
+`
+import sys
+sys.version
+`
+  );
   output.value += `
 Python ${output.value.split(" ")[0]}
 
@@ -64,21 +68,25 @@ async function evaluatePython() {
     console.log('target_pos = ' + target_pos);
 
     let pyodide = await pyodideReadyPromise;
-  try {
-    pyodide.runPython(`
-      import io
-      sys.stdout = io.StringIO()
-      
-      target_pos = ${target_pos}      
-      `);
-    pyodide.runPython(`
+    try {
+        pyodide.runPython(
+`
+import io
+sys.stdout = io.StringIO()
+
+target_pos = ${target_pos}      
+`
+        );
+        pyodide.runPython(
+`
 ${editor.getValue()}    
 print(function(target_pos))
-    `);
-    let stdout = pyodide.runPython("sys.stdout.getvalue()");
-    addToOutput(stdout);
-    window.location.hash = `js_says: ${stdout.toString()}`;
-    // console.log(`js_says: ${js_says}`);
+`
+        );
+        let stdout = pyodide.runPython("sys.stdout.getvalue()");
+        addToOutput(stdout);
+        window.location.hash = `js_says: ${stdout.toString()}`;
+        // console.log(`js_says: ${js_says}`);
   } catch (err) {
     addToOutput(err);
   }
