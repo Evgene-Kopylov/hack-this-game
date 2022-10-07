@@ -16,7 +16,7 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 editor.setValue(`
 from typing import Optional
 
-def move_rectangle(target_pos: (float, float) = None) -> Optional[str]:
+def function(target_pos: (float, float) = None) -> Optional[str]:
     """
     @param target_pos: 
     @return: 
@@ -70,11 +70,10 @@ async function evaluatePython() {
       sys.stdout = io.StringIO()
       
       target_pos = ${target_pos}      
-      input_value = ${wasm_says}
       `);
     pyodide.runPython(`
 ${editor.getValue()}    
-print(move_rectangle(input_value))
+print(function(target_pos))
     `);
     let stdout = pyodide.runPython("sys.stdout.getvalue()");
     addToOutput(stdout);
