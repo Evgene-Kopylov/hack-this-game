@@ -1,5 +1,8 @@
 use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::*;
+// use quad_url::*;
+// use urlencoding::{decode};
+
 
 mod settings;
 use settings::*;
@@ -17,10 +20,13 @@ use crate::target_unit::TargetUnit;
 
 #[macroquad::main("breakout")]
 async fn main() {
+    info!("1___________++++++++++++++++++++++++++++++++++______________");
     let main_unit_texture: Texture2D = load_texture(MAIN_UNIT_TEXTURE_PATH).await.unwrap();
     let projectile_texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
+    info!("2___________++++++++++++++++++++++++++++++++++______________");
     let shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
     let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
+    info!("3___________++++++++++++++++++++++++++++++++++______________");
     let spawn_position = (screen_width() * 0.5, screen_height() * 0.8);
     let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
     let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();

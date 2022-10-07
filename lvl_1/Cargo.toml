@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 macroquad = "0.3.24"
+quad-url = "0.1.1"
+urlencoding = "2.1.2"
