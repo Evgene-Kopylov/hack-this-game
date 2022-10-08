@@ -26,19 +26,29 @@
     }
 
     .game_window {
-      width: 500px;
-      height: 500px;
-      position: absolute;
+      width: 720px;
+      height: 720px;
+      margin: auto;
+      /*position: absolute;*/
     }
 
     #output {
-      margin-top: 500px;
-      width: 500px;
     }
   </style>
   <title></title>
 </head>
-<body class="h-full overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+<body>
+<div>
+  <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
+</div>
+
+<div class="h-full overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+  <div>
+    <!-- run button to pass the code to pyodide.runPython() -->
+    <button onclick="evaluatePython()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-green-700 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 text-slate-300">Run</button>
+    <!-- clean the output section -->
+    <button onclick="clearHistory()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-red-700 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 text-slate-300">Clear History</button>
+  </div>
   <p class="text-slate-200 text-3xl my-4 font-extrabold mx-2 pt-8">Run Python in your browser</p>
   <div class="h-3/4 flex flex-row">
     <div class="grid w-2/3 border-dashed border-2 border-slate-500 mx-2">
@@ -47,16 +57,11 @@
     </div>
     <div class="grid border-dashed border-2 border-slate-500 mx-2">
       <!-- output section where we show the stdout of the python code execution -->
-      <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
 
       <textarea readonly class="p-6 text-slate-200 bg-slate-900" id="output" name="output"></textarea>
     </div>
   </div>
 <!-- Minified and statically hosted version of https://github.com/not-fl3/macroquad/blob/master/js/mq_js_bundle.js -->
-  <!-- run button to pass the code to pyodide.runPython() -->
-  <button onclick="evaluatePython()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-green-700 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 text-slate-300">Run</button>
-  <!-- clean the output section -->
-  <button onclick="clearHistory()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-red-700 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 text-slate-300">Clear History</button>
   <script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
 
 
@@ -65,5 +70,6 @@
   <script>load("lvl_1.wasm");</script> <!-- Your compiled wasm file -->
 <!--  <script>load("../wasd_rect.wasm");</script> &lt;!&ndash; Your compiled wasm file &ndash;&gt;-->
   <script src="python_in_browser/static/js/main.js"></script>
+</div>
 </body>
 </html>
