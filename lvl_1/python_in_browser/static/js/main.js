@@ -19,7 +19,7 @@ def function(
     unit_pos: (float, float)
 ) -> (float, str):
     """
-    Наведение и действие.
+    Наведение и команда.
     
     @param target_pos: координаты мишени 
     @param unit_pos: координаты юнита 
