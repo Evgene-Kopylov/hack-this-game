@@ -13,21 +13,21 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
               matchBrackets: true,
             });
 // set the initial value of the editor
-editor.setValue(`
+editor.setValue(`# Рассчитать угол поворота по двум точкам.
+
 def function(
-    target_pos: (float, float),
-    unit_pos: (float, float)
-) -> (float, str):
+    target_pos: (int, int),
+    unit_pos: (int, int)
+) -> float:
     """
-    Наведение и команда.
+    Наведение.
     
     @param target_pos: координаты мишени 
     @param unit_pos: координаты юнита 
-    @return: вернуть угол поворота и команду. 
-             Допустима команда: "Shoot"
+    @return: угол поворота до цели.
     """
 
-    return 0, "Shoot"
+    return 10
 
 `);
 output.value = "Initializing...\n";
@@ -93,9 +93,9 @@ unit_pos = ${unit_pos}
         `);
         pyodide.runPython(`
 ${editor.getValue()}    
-rotation, command = function(target_pos, unit_pos)
+rotation = function(target_pos, unit_pos)
 print(rotation)
-print(command)
+# print(command)
         `);
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         let result = stdout.toString().trim().split("\n")
@@ -104,8 +104,9 @@ print(command)
         let rotation = result[0];
         setParameter("rotation", rotation.toString().trim());
 
-        let command = result[1];
-        setParameter("command", command.toString().trim());
+        // let command = result[1];
+        // setParameter("command", command.toString().trim());
+        setParameter("command", "Shoot");
   } catch (err) {
     addToOutput(err);
   }

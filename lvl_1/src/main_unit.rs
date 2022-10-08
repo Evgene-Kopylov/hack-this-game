@@ -83,9 +83,9 @@ impl MainUnit {
                 Err(_) => {}
             }
 
-            let line = format!("({}, {})", target_pos.0, target_pos.1);
+            let line = format!("({}, {})", target_pos.0 as i32, target_pos.1 as i32);
             set_program_parameter("target_pos", line.as_str());
-            let line = format!("({}, {})", self.position.0, self.position.1);
+            let line = format!("({}, {})", self.position.0 as i32, self.position.1 as i32);
             set_program_parameter("unit_pos", line.as_str());
 
         }
