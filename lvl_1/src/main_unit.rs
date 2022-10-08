@@ -5,7 +5,15 @@ use quad_url::{get_hash, set_hash, set_program_parameter};
 use urlencoding::decode;
 use crate::projectile::*;
 use crate::settings::*;
-use crate::utils::{parse_parameter};
+use crate::utils::{get_parameter_value};
+
+
+
+#[derive(PartialEq)]
+enum Command {
+    None,
+    Shoot,
+}
 
 pub struct MainUnit {
     pub texture: Texture2D,
@@ -23,7 +31,7 @@ pub struct MainUnit {
     shoot_delay: f32,
     shoot_range: f32,
     tick: f32,
-    command: &'static str,
+    command: Command,
 }
 
 
@@ -47,7 +55,7 @@ impl MainUnit {
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
             tick: 0.,
-            command: "",
+            command: Command::None,
         }
     }
 
@@ -56,12 +64,17 @@ impl MainUnit {
     ) -> (bool, f32) {
         self.shoot_timer += dt;
         self.tick += dt;
-        if self.tick >= 0.4 {
-            self.command = "";
+        if self.tick >= 1. {
+            self.tick = 0.;
+            let case = String::from("Shoot");
+            match get_parameter_value("command") {
+                case => self.command = Command::Shoot,
+                _ => self.command = Command::None,
+            }
+            set_program_parameter("command", "");
 
-            let rotation_angle = parse_parameter("rotation");
+            // let rotation_angle = get_parameter_value("rotation");
             // info!("rotation_angle {}", rotation_angle);
-
 
             let raw_url_hash = get_hash();
             let url_hash = decode(&*raw_url_hash)
@@ -71,37 +84,10 @@ impl MainUnit {
                 .split(' ')
                 .collect::<Vec<&str>>();
 
-            match hash_vec[0] {
-                "#wasm_says:" => {
-                    // info!("wasm_says");
-                },
-                "#js_says:" => {
-                    let js_says = hash_vec[1];
-                    // info!("wasm: js_says: {}", js_says);
-
-                    match js_says {
-                        "Shoot" => {
-                            self.command = "Shoot";
-                        },
-                        _ => {}
-                    }
-
-                }
-                _ => {
-                    // info!("no match")
-                }
-            }
-
-
-
-            // info!("wasm: {:?}", &hash_vec);
-
-            let wasm_says = format!("wasm_says: {:?} ", target_pos);
-            set_hash(&*wasm_says);
             let line = format!("({}, {})", target_pos.0, target_pos.1);
             set_program_parameter("target_pos", line.as_str());
-            self.tick = 0.;
-            // info!("wasm: {}", wasm_says);
+            let line = format!("({}, {})", self.position.0, self.position.1);
+            set_program_parameter("unit_pos", line.as_str());
 
         }
 
@@ -153,8 +139,9 @@ impl MainUnit {
             self.rotation = (dy / dx).atan() - f32::to_radians(270.);
         }
 
-        if (is_mouse_button_down(MouseButton::Left) || self.command == "Shoot")
+        if (is_mouse_button_down(MouseButton::Left) || self.command == Command::Shoot)
             && self.shoot_timer >= self.shoot_delay {
+            info!("-=-=-=-=-");
             let size = (
                 self.projectile_texture.width(), self.projectile_texture.height());
             let speed = self.speed * 3.;
