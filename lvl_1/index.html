@@ -17,6 +17,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/mode/python/python.min.js"
   integrity="sha512-/mavDpedrvPG/0Grj2Ughxte/fsm42ZmZWWpHz1jCbzd5ECv8CB7PomGtw0NAnhHmE/lkDFkRMupjoohbKNA1Q=="
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!--  jquery-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+          integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- import codemirror dracula theme styles from cdn -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/dracula.css"/>
   <style>
@@ -36,13 +40,37 @@
       margin: 10px auto;
     }
 
-    #output {
+    #sidebar {
+      color: gray;
+      font-size: 3ch;
+      padding: 1ch;
+      position: absolute;
     }
+
+    .current_lvl {
+      color: aliceblue;
+      pointer-events: none;
+    }
+
   </style>
   <title></title>
 </head>
 <body>
 <div>
+
+  <div id="sidebar">
+    <h1><a href="../index.html">Hack this game.</a></h1>
+    <h1><a href="../lvl_1/index.html">lvl_1</a></h1>
+
+    <script>
+      let lvl = window.location.pathname.split('/')[2];
+      console.log(lvl);
+      let current_lvl = $(`a[href="../${lvl}/index.html"]`);
+      current_lvl.addClass("current_lvl");
+    </script>
+
+  </div>
+
   <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
 </div>
 
