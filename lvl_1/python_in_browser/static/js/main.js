@@ -55,6 +55,14 @@ Python ${output.value.split(" ")[0]}
 // run the main funciton
 let pyodideReadyPromise = main();
 
+function setParameter(name, value) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.set(name, value);
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + urlParams;
+    window.history.pushState({path:newurl},'',newurl);
+}
+
 // pass the editor value to the pyodide.runPython function and show the result in the output section
 async function evaluatePython() {
     let wasm_says = decodeURI(window.location.hash);
@@ -87,10 +95,7 @@ print(function(target_pos))
         addToOutput(stdout);
         window.location.hash = `js_says: ${stdout.toString()}`;
 
-        urlParams.set("command", stdout.toString());
-        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + urlParams;
-        window.history.pushState({path:newurl},'',newurl);
-
+        setParameter("command", stdout.toString());
   } catch (err) {
     addToOutput(err);
   }
