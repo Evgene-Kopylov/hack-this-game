@@ -16,5 +16,5 @@ pub fn get_parameter_value(arg: &str) -> String {
             }
         }
     }
-    "".to_string()
+    String::new()
 }

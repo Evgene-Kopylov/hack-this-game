@@ -69,9 +69,10 @@ impl MainUnit {
             let case = String::from("Shoot");
             let para = get_parameter_value("command");
             info!("para {:?}, para == case is {}", para, para == case);
-            match para {
-                case => self.command = Command::Shoot,
-                _ => self.command = Command::None,
+            if para == case {
+                self.command = Command::Shoot
+            } else {
+                self.command = Command::None;
             }
             set_program_parameter("command", "");
 
