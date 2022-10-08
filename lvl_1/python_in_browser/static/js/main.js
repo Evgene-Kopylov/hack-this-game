@@ -15,11 +15,11 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 // set the initial value of the editor
 editor.setValue(`
 def function(
-    target_pos: (float, float) = None,
-    unit_pos: (float, float) = None
-    ) -> (float, str):
+    target_pos: (float, float),
+    unit_pos: (float, float)
+) -> (float, str):
     """
-    Наведение на цель и выстрел.
+    Наведение и действие.
     
     @param target_pos: координаты мишени 
     @param unit_pos: координаты юнита 
