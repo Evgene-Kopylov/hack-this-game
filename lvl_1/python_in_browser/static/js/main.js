@@ -95,7 +95,7 @@ print(function(target_pos))
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         addToOutput(stdout);
 
-        setParameter("command", stdout.toString());
+        setParameter("command", stdout.toString().trim());
   } catch (err) {
     addToOutput(err);
   }

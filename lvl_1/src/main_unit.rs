@@ -67,7 +67,9 @@ impl MainUnit {
         if self.tick >= 1. {
             self.tick = 0.;
             let case = String::from("Shoot");
-            match get_parameter_value("command") {
+            let para = get_parameter_value("command");
+            info!("para {:?}, para == case is {}", para, para == case);
+            match para {
                 case => self.command = Command::Shoot,
                 _ => self.command = Command::None,
             }
