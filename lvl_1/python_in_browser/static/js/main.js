@@ -86,7 +86,11 @@ print(function(target_pos))
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         addToOutput(stdout);
         window.location.hash = `js_says: ${stdout.toString()}`;
-        // console.log(`js_says: ${js_says}`);
+
+        urlParams.set("command", stdout.toString());
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + urlParams;
+        window.history.pushState({path:newurl},'',newurl);
+
   } catch (err) {
     addToOutput(err);
   }
