@@ -1,3 +1,4 @@
+use std::num::ParseIntError;
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
@@ -75,8 +76,22 @@ impl MainUnit {
             }
             set_program_parameter("command", "");
 
-            // let rotation_angle = get_parameter_value("rotation");
-            // info!("rotation_angle {}", rotation_angle);
+            let rotation = get_parameter_value("rotation");
+            info!("1 rotation = {}", rotation);
+            info!("2 rotation = {:?}", rotation.parse::<f32>());
+            // info!("3 rotation = {}", rotation.parse::<f32>().unwrap());
+            // let rotation = rotation.parse::<f32>();
+            match rotation.parse::<f32>() {
+                Ok(a) => {
+                    self.rotation = a.to_radians();
+                    // info!("Ok, a = {}, self.rotation = {}", a, self.rotation);
+                }
+                Err(e) => {
+                    info!("Err e = {}", e)
+                }
+            }
+
+
 
             let raw_url_hash = get_hash();
             let url_hash = decode(&*raw_url_hash)
@@ -127,18 +142,22 @@ impl MainUnit {
         self.position.0 += x_move * dt * self.speed;
         self.position.1 += y_move * dt * self.speed;
 
-        // поворот в сторону курсора
-        self.rotation = self.rotation % f32::to_radians(360.);
-        let mut dx = self.position.0 - mouse_position.x;
-        if dx == 0f32 { dx += 1f32; };
+        if self.command == Command::None {
 
-        let mut dy = self.position.1 - mouse_position.y;
-        if dy == 0f32 { dy += 1f32; };
+            // поворот в сторону курсора
+            self.rotation = self.rotation % f32::to_radians(360.);
+            let mut dx = self.position.0 - mouse_position.x;
+            if dx == 0f32 { dx += 1f32; };
 
-        if dx >= 0f32 {
-            self.rotation = (dy / dx).atan() - f32::to_radians(90.);
-        } else {
-            self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+            let mut dy = self.position.1 - mouse_position.y;
+            if dy == 0f32 { dy += 1f32; };
+
+            if dx >= 0f32 {
+                self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+            } else {
+                self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+            }
+
         }
 
         if (is_mouse_button_down(MouseButton::Left) || self.command == Command::Shoot)
