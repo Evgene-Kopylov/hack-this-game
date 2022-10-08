@@ -13,18 +13,25 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
               matchBrackets: true,
             });
 // set the initial value of the editor
-editor.setValue(
-`
+editor.setValue(`
 from typing import Optional
 
-def function(target_pos: (float, float) = None) -> Optional[str]:
+
+print(f"{target_pos=}")
+print(f"{unit_pos=}")
+
+def function(
+    target_pos: (float, float) = None,
+    unit_pos: (float, float) = None
+    ) -> Optional[str]:
     """
     @param target_pos: 
     @return: 
     """
-    return "Shoot"
-`
-);
+
+    return 0, "Shoot"
+
+`);
 output.value = "Initializing...\n";
 
 // Add pyodide returned value to the output
@@ -40,12 +47,10 @@ function clearHistory() {
 // init Pyodide and show sys.version when it's loaded successfully
 async function main() {
   let pyodide = await loadPyodide();
-  output.value = pyodide.runPython(
-`
+  output.value = pyodide.runPython(`
 import sys
 sys.version
-`
-  );
+  `);
   output.value += `
 Python ${output.value.split(" ")[0]}
 
@@ -74,28 +79,37 @@ function getParameterValue(name) {
 
 // pass the editor value to the pyodide.runPython function and show the result in the output section
 async function evaluatePython() {
-    let target_pos = getParameterValue('target_pos')
+    console.log('window.location.search = ' + window.location.search);
+    let target_pos = getParameterValue('target_pos');
+    let unit_pos = getParameterValue('unit_pos');
+    // console.log("unit_pos = " + unit_pos);
 
     let pyodide = await pyodideReadyPromise;
     try {
-        pyodide.runPython(
-`
+        pyodide.runPython(`    
 import io
 sys.stdout = io.StringIO()
 
-target_pos = ${target_pos}      
-`
-        );
-        pyodide.runPython(
-`
+
+target_pos = ${target_pos}
+unit_pos = ${unit_pos}
+        `);
+        pyodide.runPython(`
 ${editor.getValue()}    
-print(function(target_pos))
-`
-        );
+print(function(target_pos, unit_pos))
+        `);
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         addToOutput(stdout);
 
-        setParameter("command", stdout.toString().trim());
+        // // get rotation
+        // pyodide.runPython("print(rotation)");
+        // let rotation = pyodide.runPython("sys.stdout.getvalue()");
+        // setParameter("rotation", rotation.toString().trim());
+        //
+        // // get command
+        // pyodide.runPython("print(command)");
+        // let command = pyodide.runPython("sys.stdout.getvalue()");
+        // setParameter("command", command.toString().trim());
   } catch (err) {
     addToOutput(err);
   }

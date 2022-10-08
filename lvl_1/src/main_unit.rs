@@ -77,8 +77,8 @@ impl MainUnit {
             set_program_parameter("command", "");
 
             let rotation = get_parameter_value("rotation");
-            info!("1 rotation = {}", rotation);
-            info!("2 rotation = {:?}", rotation.parse::<f32>());
+            // info!("1 rotation = {}", rotation);
+            // info!("2 rotation = {:?}", rotation.parse::<f32>());
             // info!("3 rotation = {}", rotation.parse::<f32>().unwrap());
             // let rotation = rotation.parse::<f32>();
             match rotation.parse::<f32>() {
@@ -87,7 +87,7 @@ impl MainUnit {
                     // info!("Ok, a = {}, self.rotation = {}", a, self.rotation);
                 }
                 Err(e) => {
-                    info!("Err e = {}", e)
+                    // info!("Err e = {}", e)
                 }
             }
 
