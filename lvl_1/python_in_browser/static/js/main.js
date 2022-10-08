@@ -14,18 +14,17 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             });
 // set the initial value of the editor
 editor.setValue(`
-from typing import Optional
-
-
 def function(
     target_pos: (float, float) = None,
     unit_pos: (float, float) = None
-    ) -> Optional[str]:
+    ) -> (float, str):
     """
+    Наведение на цель и выстрел.
     
     @param target_pos: координаты мишени 
     @param unit_pos: координаты юнита 
-    @return: вернуть угол поворота и команду. Допустима команда "Shoot"
+    @return: вернуть угол поворота и команду. 
+             Допустима команда: "Shoot"
     """
 
     return 0, "Shoot"
