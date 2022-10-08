@@ -53,6 +53,11 @@ sys.version
 Python ${output.value.split(" ")[0]}
 
 `;
+
+  // Версия Python в заголовке IDE
+  let element = window.document.getElementById("python_version");
+  element.innerText = output.value.split(" ")[0];
+
   return pyodide;
 }
 // run the main funciton
