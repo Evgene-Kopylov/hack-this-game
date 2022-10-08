@@ -59,21 +59,22 @@ function setParameter(name, value) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.set(name, value);
-    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + urlParams;
+    const newurl = window.location.protocol
+        + "//" + window.location.host
+        + window.location.pathname
+        + '?' + urlParams;
     window.history.pushState({path:newurl},'',newurl);
+}
+
+function getParameterValue(name) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return decodeURI(urlParams.get(name));
 }
 
 // pass the editor value to the pyodide.runPython function and show the result in the output section
 async function evaluatePython() {
-    let wasm_says = decodeURI(window.location.hash);
-    // console.log(`js: raw_wasm_say: ${wasm_says}`);
-    wasm_says = wasm_says.split(": ").slice(1);
-    // console.log(`js: wasm_says: ${wasm_says}`);
-
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const target_pos = decodeURI(urlParams.get('target_pos'));
-    console.log('target_pos = ' + target_pos);
+    let target_pos = getParameterValue('target_pos')
 
     let pyodide = await pyodideReadyPromise;
     try {
@@ -93,7 +94,6 @@ print(function(target_pos))
         );
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         addToOutput(stdout);
-        window.location.hash = `js_says: ${stdout.toString()}`;
 
         setParameter("command", stdout.toString());
   } catch (err) {
