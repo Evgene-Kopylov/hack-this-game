@@ -17,8 +17,8 @@ editor.setValue(`
 from typing import Optional
 
 
-print(f"{target_pos=}")
-print(f"{unit_pos=}")
+# print(f"{target_pos=}")
+# print(f"{unit_pos=}")
 
 def function(
     target_pos: (float, float) = None,
@@ -96,20 +96,22 @@ unit_pos = ${unit_pos}
         `);
         pyodide.runPython(`
 ${editor.getValue()}    
-print(function(target_pos, unit_pos))
+rotation, command = function(target_pos, unit_pos)
+print(rotation)
+print(command)
         `);
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
+        let result = stdout.toString().trim().split("\n")
+        console.log("stdout = " + stdout);
+        console.log("result[0] = " + result[0]);
+        console.log("result[1] = " + result[1]);
         addToOutput(stdout);
 
-        // // get rotation
-        // pyodide.runPython("print(rotation)");
-        // let rotation = pyodide.runPython("sys.stdout.getvalue()");
-        // setParameter("rotation", rotation.toString().trim());
-        //
-        // // get command
-        // pyodide.runPython("print(command)");
-        // let command = pyodide.runPython("sys.stdout.getvalue()");
-        // setParameter("command", command.toString().trim());
+        let rotation = result[0];
+        setParameter("rotation", rotation.toString().trim());
+
+        let command = result[1];
+        setParameter("command", command.toString().trim());
   } catch (err) {
     addToOutput(err);
   }
