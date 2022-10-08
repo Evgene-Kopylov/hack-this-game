@@ -77,17 +77,13 @@ impl MainUnit {
             set_program_parameter("command", "");
 
             let rotation = get_parameter_value("rotation");
-            // info!("1 rotation = {}", rotation);
-            // info!("2 rotation = {:?}", rotation.parse::<f32>());
-            // info!("3 rotation = {}", rotation.parse::<f32>().unwrap());
-            // let rotation = rotation.parse::<f32>();
+
             match rotation.parse::<f32>() {
                 Ok(a) => {
                     self.rotation = a.to_radians();
-                    // info!("Ok, a = {}, self.rotation = {}", a, self.rotation);
                 }
                 Err(e) => {
-                    // info!("Err e = {}", e)
+                    info!("parse Err: {}", e)
                 }
             }
 
@@ -97,9 +93,9 @@ impl MainUnit {
             let url_hash = decode(&*raw_url_hash)
                 .unwrap()
                 .to_string();
-            let hash_vec = url_hash
-                .split(' ')
-                .collect::<Vec<&str>>();
+            // let hash_vec = url_hash
+            //     .split(' ')
+            //     .collect::<Vec<&str>>();
 
             let line = format!("({}, {})", target_pos.0, target_pos.1);
             set_program_parameter("target_pos", line.as_str());

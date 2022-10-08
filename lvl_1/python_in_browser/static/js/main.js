@@ -17,16 +17,15 @@ editor.setValue(`
 from typing import Optional
 
 
-# print(f"{target_pos=}")
-# print(f"{unit_pos=}")
-
 def function(
     target_pos: (float, float) = None,
     unit_pos: (float, float) = None
     ) -> Optional[str]:
     """
-    @param target_pos: 
-    @return: 
+    
+    @param target_pos: координаты мишени 
+    @param unit_pos: координаты юнита 
+    @return: вернуть угол поворота и команду. Допустима команда "Shoot"
     """
 
     return 0, "Shoot"
