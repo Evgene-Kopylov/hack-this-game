@@ -68,7 +68,6 @@ impl MainUnit {
             self.tick = 0.;
             let case = String::from("Shoot");
             let para = get_parameter_value("command");
-            info!("para {:?}, para == case is {}", para, para == case);
             if para == case {
                 self.command = Command::Shoot
             } else {
@@ -144,7 +143,6 @@ impl MainUnit {
 
         if (is_mouse_button_down(MouseButton::Left) || self.command == Command::Shoot)
             && self.shoot_timer >= self.shoot_delay {
-            info!("-=-=-=-=-");
             let size = (
                 self.projectile_texture.width(), self.projectile_texture.height());
             let speed = self.speed * 3.;
