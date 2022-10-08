@@ -80,9 +80,7 @@ impl MainUnit {
                 Ok(a) => {
                     self.rotation = a.to_radians();
                 }
-                Err(e) => {
-                    // info!("parse Err: {}", e)
-                }
+                Err(_) => {}
             }
 
             let line = format!("({}, {})", target_pos.0, target_pos.1);
