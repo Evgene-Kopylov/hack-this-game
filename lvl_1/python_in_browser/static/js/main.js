@@ -59,7 +59,7 @@ function setParameter(name, value) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.set(name, value);
-    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + urlParams;
+    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + urlParams;
     window.history.pushState({path:newurl},'',newurl);
 }
 
