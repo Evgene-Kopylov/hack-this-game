@@ -81,7 +81,7 @@ impl MainUnit {
                     self.rotation = a.to_radians();
                 }
                 Err(e) => {
-                    info!("parse Err: {}", e)
+                    // info!("parse Err: {}", e)
                 }
             }
 
