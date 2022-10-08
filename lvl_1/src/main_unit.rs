@@ -1,9 +1,7 @@
-use std::num::ParseIntError;
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
-use quad_url::{get_hash, set_hash, set_program_parameter};
-use urlencoding::decode;
+use quad_url::{set_program_parameter};
 use crate::projectile::*;
 use crate::settings::*;
 use crate::utils::{get_parameter_value};
@@ -86,16 +84,6 @@ impl MainUnit {
                     info!("parse Err: {}", e)
                 }
             }
-
-
-
-            let raw_url_hash = get_hash();
-            let url_hash = decode(&*raw_url_hash)
-                .unwrap()
-                .to_string();
-            // let hash_vec = url_hash
-            //     .split(' ')
-            //     .collect::<Vec<&str>>();
 
             let line = format!("({}, {})", target_pos.0, target_pos.1);
             set_program_parameter("target_pos", line.as_str());

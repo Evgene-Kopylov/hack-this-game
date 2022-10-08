@@ -78,7 +78,6 @@ function getParameterValue(name) {
 
 // pass the editor value to the pyodide.runPython function and show the result in the output section
 async function evaluatePython() {
-    console.log('window.location.search = ' + window.location.search);
     let target_pos = getParameterValue('target_pos');
     let unit_pos = getParameterValue('unit_pos');
     // console.log("unit_pos = " + unit_pos);
@@ -101,9 +100,6 @@ print(command)
         `);
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         let result = stdout.toString().trim().split("\n")
-        console.log("stdout = " + stdout);
-        console.log("result[0] = " + result[0]);
-        console.log("result[1] = " + result[1]);
         addToOutput(stdout);
 
         let rotation = result[0];

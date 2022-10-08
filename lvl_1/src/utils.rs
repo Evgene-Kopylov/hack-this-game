@@ -1,5 +1,4 @@
 use quad_url::{get_program_parameters};
-use macroquad::prelude::info;
 
 
 pub fn get_parameter_value(arg: &str) -> String {
