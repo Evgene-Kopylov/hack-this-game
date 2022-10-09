@@ -13,21 +13,21 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
               matchBrackets: true,
             });
 // set the initial value of the editor
-editor.setValue(`# Рассчитать угол поворота по двум точкам.
+editor.setValue(`# import math
+# import numpy
 
 def function(
     target_pos: (int, int),
     unit_pos: (int, int)
 ) -> float:
     """
-    Наведение.
+    Расчёт угла поворота по двум точкам.
     
     @param target_pos: координаты мишени 
     @param unit_pos: координаты юнита 
-    @return: угол поворота до цели.
+    @return: угол поворота в градусах.
     """
-
-    return 10
+    return 30
 
 `);
 output.value = "Initializing...\n";
@@ -87,6 +87,7 @@ async function evaluatePython() {
     // console.log("unit_pos = " + unit_pos);
 
     let pyodide = await pyodideReadyPromise;
+    await pyodide.loadPackage('numpy');
     try {
         pyodide.runPython(`    
 import io
