@@ -44,7 +44,6 @@ impl Scene {
             mouse_position,
             dt,
             assets,
-            // wasd: Vec2::new(0., 0.),
             order: Order::new(),
         }
     }

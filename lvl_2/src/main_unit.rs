@@ -20,7 +20,6 @@ pub struct MainUnit {
     shoot_timer: f32,
     shoot_delay: f32,
     pub shoot_range: f32,
-    tick: f32,
     order: Order,
 }
 
@@ -29,13 +28,11 @@ impl MainUnit {
     pub fn new(
         texture: Texture2D,
         shoot_sound: Sound,
-        // target_impact_sound: Sound,
         position: (f32, f32),
     ) -> Self {
         Self {
             texture,
             shoot_sound,
-            // target_impact_sound,
             position,
             size: (texture.width(), texture.height()),
             scale: 1.,
@@ -45,7 +42,6 @@ impl MainUnit {
             shoot_timer: 0.,
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
-            tick: 0.,
             order: Order::new(),
         }
     }
@@ -53,33 +49,11 @@ impl MainUnit {
     // Возвращает сигнал о попадании в цель
     pub fn update(&mut self, dt: f32, mouse_position: Vec2, order: &Order) -> bool {
         self.shoot_timer += dt;
-        self.order.shoot = false;
-        self.tick += dt;
-        // if self.tick >= 1. {
-        //     self.tick = 0.;
-        //     let case = String::from("Shoot");
-        //     let para = get_parameter_value("command");
-        //     if para == case {
-        //         self.order.shoot = true;
-        //     } else {
-        //         self.order.shoot = false;
-        //     }
-        //     set_program_parameter("command", "");
-        //
-        //     let rotation = get_parameter_value("rotation");
-        //
-        //     match rotation.parse::<f32>() {
-        //         Ok(a) => {
-        //             self.rotation = a.to_radians();
-        //         }
-        //         Err(_) => {}
-        //     }
-        // }
 
         self.position.0 += order.wasd.x * dt * self.speed;
         self.position.1 += order.wasd.y * dt * self.speed;
 
-        if !self.order.shoot {
+        // if !self.order.shoot {
 
             // поворот в сторону курсора
             self.rotation = self.rotation % f32::to_radians(360.);
@@ -95,7 +69,7 @@ impl MainUnit {
                 self.rotation = (dy / dx).atan() - f32::to_radians(270.);
             }
 
-        }
+        // }
 
         if (is_mouse_button_down(MouseButton::Left) || self.order.shoot)
             && self.shoot_timer >= self.shoot_delay {
