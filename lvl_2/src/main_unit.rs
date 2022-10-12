@@ -1,16 +1,11 @@
-use macroquad::audio;
-use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
-use quad_url::{set_program_parameter};
 use crate::order::Order;
 use crate::settings::*;
-use crate::utils::{get_parameter_value};
 
 
 
 pub struct MainUnit {
     pub texture: Texture2D,
-    pub shoot_sound: Sound,
     pub size: (f32, f32),
     pub scale: f32,
     pub radius: f32,
@@ -26,12 +21,10 @@ pub struct MainUnit {
 impl MainUnit {
     pub fn new(
         texture: Texture2D,
-        shoot_sound: Sound,
         position: (f32, f32),
     ) -> Self {
         Self {
             texture,
-            shoot_sound,
             position,
             size: (texture.width(), texture.height()),
             scale: 1.,
@@ -60,10 +53,14 @@ impl MainUnit {
         let mut dy = self.position.1 - mouse_position.y;
         if dy == 0f32 { dy += 1f32; };
 
-        if dx >= 0f32 {
-            self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+        if order.shoot && !(is_mouse_button_down(MouseButton::Left)) {
+            self.rotation = order.rotation;
         } else {
-            self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+            if dx >= 0f32 {
+                self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+            } else {
+                self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+            }
         }
 
         if (is_mouse_button_down(MouseButton::Left) || order.shoot)

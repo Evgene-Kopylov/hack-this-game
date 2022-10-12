@@ -33,7 +33,6 @@ impl Scene {
         Self {
             main_unit: MainUnit::new(
                 assets.main_unit_texture,
-                assets.main_unit_shoot_sound,
                 spawn_position
             ),
             target_unit: TargetUnit::new(
@@ -95,6 +94,16 @@ impl Scene {
             }
             false => {}
         }
+
+        match get_parameter_value("rotation").parse::<f32>() {
+            Ok(a) => {
+                self.order.rotation = a.to_radians();
+            }
+            Err(e) => {
+                info!("{}", e);
+            }
+        }
+
     }
 
     fn set_parameters_to_url_query(&mut self) {
@@ -138,7 +147,7 @@ impl Scene {
             self.projectiles.push(projectile);
         }
 
-        // // удаление снарядов на отлете
+        // удаление снарядов на отлете
         self.projectiles.retain(|p|
                 ((p.start_position.0 - p.position.0).powf(2f32)
                     + (p.start_position.1 - p.position.1).powf(2f32)
