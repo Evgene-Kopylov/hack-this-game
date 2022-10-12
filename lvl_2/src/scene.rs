@@ -2,6 +2,7 @@ use macroquad::input::{is_key_down, KeyCode};
 use macroquad::miniquad::info;
 use macroquad::prelude::{mouse_position, screen_height, screen_width, Vec2};
 use macroquad::time::get_frame_time;
+use quad_url::set_program_parameter;
 use crate::{MainUnit, TargetUnit};
 use crate::projectile::Projectile;
 use crate::assets::Assets;
@@ -16,6 +17,7 @@ pub struct Scene {
     dt: f32,
     assets: Assets,
     order: Order,
+    tick: f32,
 }
 
 impl Scene {
@@ -45,6 +47,7 @@ impl Scene {
             dt,
             assets,
             order: Order::new(),
+            tick: 1000.,  // большое число, чтобы сразу срабатывало
         }
     }
 
@@ -83,16 +86,33 @@ impl Scene {
         self.order.wasd = Vec2::new(x_move, y_move);
     }
 
-    // pub fn update_order_from_url_query(&mut self) {
-    //     let c = get_parameter_value("command");
-    //     // info!("{}", c);
-    // }
+    fn update_order_from_url_query(&mut self) {
+        match get_parameter_value("command") == String::from("Shoot") {
+            true => {
+                self.order.shoot = true;
+                set_program_parameter("command", "");
+                // info!("Shoot");
+            }
+            false => {}        }
+
+    }
+
+    fn set_parameters_to_url_query(&mut self) {
+        let line = format!("({}, {})", self.target_unit.position.0 as i32, self.target_unit.position.1 as i32);
+        set_program_parameter("target_pos", line.as_str());
+        let line = format!("({}, {})", self.main_unit.position.0 as i32, self.main_unit.position.1 as i32);
+        set_program_parameter("unit_pos", line.as_str());
+    }
 
     pub fn update(&mut self) {
+        self.tick += self.dt;
         self.update_order_from_user_input();
 
-        // self.update_order_from_url_query();
-
+        if self.tick >= 1. {
+            self.tick = 0.0;
+            self.set_parameters_to_url_query();
+            self.update_order_from_url_query();
+        }
         self.dt = get_frame_time();
         self.target_unit.shift = (0., 0.);
         self.mouse_position = mouse_position().into();
