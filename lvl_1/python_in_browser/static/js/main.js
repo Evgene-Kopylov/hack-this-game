@@ -45,7 +45,9 @@ function clearHistory() {
 // init Pyodide and show sys.version when it's loaded successfully
 async function main() {
   let pyodide = await loadPyodide();
-  output.value = pyodide.runPython(`
+  await pyodide.loadPackage('numpy');
+
+    output.value = pyodide.runPython(`
 import sys
 sys.version
   `);
@@ -87,7 +89,6 @@ async function evaluatePython() {
     // console.log("unit_pos = " + unit_pos);
 
     let pyodide = await pyodideReadyPromise;
-    await pyodide.loadPackage('numpy');
     try {
         pyodide.runPython(`    
 import io
