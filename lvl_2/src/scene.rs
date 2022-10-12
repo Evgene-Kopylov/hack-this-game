@@ -80,6 +80,11 @@ impl Scene {
             ).await;
             self.projectiles.push(projectile);
         }
+
+        for i in 0..self.projectiles.len() {
+            self.projectiles[i].update(self.dt);
+        }
+
     }
 
     pub fn draw(&self) {
