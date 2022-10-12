@@ -26,7 +26,7 @@ pub struct MainUnit {
     pub speed: f32,
     shoot_timer: f32,
     shoot_delay: f32,
-    shoot_range: f32,
+    pub(crate) shoot_range: f32,
     tick: f32,
     command: Command,
 }

@@ -81,6 +81,12 @@ impl Scene {
             self.projectiles.push(projectile);
         }
 
+        // // удаление снарядов на отлете
+        self.projectiles.retain(
+            |p|
+                ((p.start_position.0 - p.position.0).powf(2f32)
+                    + (p.start_position.1 - p.position.1).powf(2f32)
+                    < self.main_unit.shoot_range.powf(2f32)) && p.alive);
         for i in 0..self.projectiles.len() {
             self.projectiles[i].update(self.dt);
         }
