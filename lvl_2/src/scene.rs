@@ -63,8 +63,8 @@ impl Scene {
         let soot= self.main_unit.update(
             self.dt,
             self.mouse_position,
-            self.target_unit.position,
-            self.target_unit.texture.width() / 2.
+            // self.target_unit.position,
+            // self.target_unit.texture.width() / 2.
         );
         if soot {
             info!("Shoot");
@@ -88,8 +88,27 @@ impl Scene {
                     + (p.start_position.1 - p.position.1).powf(2f32)
                     < self.main_unit.shoot_range.powf(2f32)) && p.alive);
         for i in 0..self.projectiles.len() {
-            self.projectiles[i].update(self.dt);
+            if (self.projectiles[i].position.0 - self.target_unit.position.0).powf(2f32) +
+                (self.projectiles[i].position.1 - self.target_unit.position.1).powf(2f32)
+                < self.target_unit.radius.powf(2f32) {
+                info!("Hit");
+                self.projectiles[i].alive = false;
+                let target_impact = true;
+                let impact_angle = self.projectiles[i].rotation;
+                self.target_unit.update(self.dt, true, self.projectiles[i].rotation);
+            }
+            //     let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+            //     sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
+            //     audio::play_sound(self.target_impact_sound, sound_params);
+            //     target_impact = true;
+            //     impact_angle = self.projectiles[i].rotation;
+            //     self.projectiles[i].alive = false;
+            // } else {
+                self.projectiles[i].update(self.dt);
+            // }
         }
+
+        // self.target_unit.update()
 
     }
 

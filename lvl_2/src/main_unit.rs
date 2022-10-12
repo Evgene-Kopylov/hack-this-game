@@ -26,7 +26,7 @@ pub struct MainUnit {
     pub speed: f32,
     shoot_timer: f32,
     shoot_delay: f32,
-    pub(crate) shoot_range: f32,
+    pub shoot_range: f32,
     tick: f32,
     command: Command,
 }
@@ -58,7 +58,9 @@ impl MainUnit {
     }
 
     // Возвращает сигнал о попадании в цель
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2, target_pos: (f32, f32), target_rad: f32
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2,
+                  // target_pos: (f32, f32),
+                  // target_rad: f32
     ) -> bool {
         self.shoot_timer += dt;
         self.command = Command::None;
@@ -83,10 +85,10 @@ impl MainUnit {
                 Err(_) => {}
             }
 
-            let line = format!("({}, {})", target_pos.0 as i32, target_pos.1 as i32);
-            set_program_parameter("target_pos", line.as_str());
-            let line = format!("({}, {})", self.position.0 as i32, self.position.1 as i32);
-            set_program_parameter("unit_pos", line.as_str());
+            // let line = format!("({}, {})", target_pos.0 as i32, target_pos.1 as i32);
+            // set_program_parameter("target_pos", line.as_str());
+            // let line = format!("({}, {})", self.position.0 as i32, self.position.1 as i32);
+            // set_program_parameter("unit_pos", line.as_str());
 
         }
 

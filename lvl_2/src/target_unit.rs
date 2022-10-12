@@ -7,6 +7,7 @@ pub struct TargetUnit {
     pub shadow_texture: Texture2D,
     color: Color,
     pub position: (f32, f32),
+    pub radius: f32,
     pub shift: (f32, f32),
 }
 
@@ -19,7 +20,15 @@ impl TargetUnit {
             shadow_texture,
             color,
             position: spawn_position,
+            radius: texture.width() * 0.5,
             shift: (0., 0.),
+        }
+    }
+
+    pub fn update(&mut self, dt: f32, impact: bool, impact_angle: f32) {
+        if impact {
+            let shift = 5.;
+            self.shift = (shift * impact_angle.sin(), shift * impact_angle.cos());
         }
     }
 
