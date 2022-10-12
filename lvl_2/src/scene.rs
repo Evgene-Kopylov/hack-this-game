@@ -1,15 +1,10 @@
-use macroquad::prelude::{
-    mouse_position,
-    screen_height,
-    screen_width,
-    Vec2
-};
+use macroquad::input::{is_key_down, KeyCode};
+use macroquad::prelude::{mouse_position, screen_height, screen_width, Vec2};
 use macroquad::time::get_frame_time;
 use crate::{MainUnit, TargetUnit};
 use crate::projectile::Projectile;
 use crate::assets::Assets;
-
-
+use crate::order::Order;
 
 pub struct Scene {
     main_unit: MainUnit,
@@ -18,6 +13,7 @@ pub struct Scene {
     mouse_position: Vec2,
     dt: f32,
     assets: Assets,
+    order: Order,
 }
 
 impl Scene {
@@ -46,16 +42,57 @@ impl Scene {
             mouse_position,
             dt,
             assets,
+            // wasd: Vec2::new(0., 0.),
+            order: Order::new(),
         }
     }
 
-    pub async fn update(&mut self) {
+    fn user_input(&mut self) {
+        let mut x_move = 0f32;
+        if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
+            x_move -= 1f32;
+        }
+        if is_key_down(KeyCode::Right) || is_key_down(KeyCode::D){
+            x_move += 1f32;
+        }
+
+        let mut y_move = 0f32;
+        if is_key_down(KeyCode::Up) || is_key_down(KeyCode::W) {
+            y_move -= 1f32;
+        }
+        if is_key_down(KeyCode::Down) || is_key_down(KeyCode::S) {
+            y_move += 1f32;
+        }
+
+        if self.main_unit.position.0 < 1f32 {
+            x_move = 1f32;
+        }
+        if self.main_unit.position.0 > screen_width() {
+            x_move = -1f32;
+        }
+
+        if self.main_unit.position.1 < 1f32 {
+            y_move = 1f32;
+        }
+        if self.main_unit.position.1 > screen_height() {
+            y_move = -1f32;
+        }
+        self.order.wasd = Vec2::new(x_move, y_move)
+    }
+
+    pub fn update(&mut self) {
+        self.user_input();
+
         self.dt = get_frame_time();
         self.target_unit.shift = (0., 0.);
         self.mouse_position = mouse_position().into();
+
+        // let command = Command::new();
+
         let soot= self.main_unit.update(
             self.dt,
             self.mouse_position,
+            &self.order,
         );
         if soot {
             let position = (  // точка появления выстрела

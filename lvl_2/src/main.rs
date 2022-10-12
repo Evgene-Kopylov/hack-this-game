@@ -10,6 +10,7 @@ mod target_unit;
 mod scene;
 mod utils;
 mod assets;
+mod order;
 
 use main_unit::*;
 use crate::scene::Scene;
@@ -21,7 +22,7 @@ async fn main() {
     let mut scene = Scene::new().await;
 
     loop {
-        scene.update().await;
+        scene.update();
         clear_background(GROUND_COLOR);
         scene.draw();
         next_frame().await
