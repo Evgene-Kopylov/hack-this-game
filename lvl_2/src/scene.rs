@@ -47,7 +47,9 @@ impl Scene {
         }
     }
 
-    fn user_input(&mut self) {
+
+    /// Зафиксировать активность пользователя.
+    fn update_order_from_user_input(&mut self) {
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
             x_move -= 1f32;
@@ -77,17 +79,22 @@ impl Scene {
         if self.main_unit.position.1 > screen_height() {
             y_move = -1f32;
         }
-        self.order.wasd = Vec2::new(x_move, y_move)
+        self.order.wasd = Vec2::new(x_move, y_move);
+    }
+
+    pub fn update_order_from_url_query(&mut self) {
+
     }
 
     pub fn update(&mut self) {
-        self.user_input();
+        self.update_order_from_user_input();
+
+        self.update_order_from_url_query();
 
         self.dt = get_frame_time();
         self.target_unit.shift = (0., 0.);
         self.mouse_position = mouse_position().into();
 
-        // let command = Command::new();
 
         let soot= self.main_unit.update(
             self.dt,
