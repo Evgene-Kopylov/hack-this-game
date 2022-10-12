@@ -17,7 +17,7 @@ enum Command {
 pub struct MainUnit {
     pub texture: Texture2D,
     pub shoot_sound: Sound,
-    target_impact_sound: Sound,
+    // target_impact_sound: Sound,
     pub size: (f32, f32),
     pub scale: f32,
     pub radius: f32,
@@ -36,13 +36,13 @@ impl MainUnit {
     pub fn new(
         texture: Texture2D,
         shoot_sound: Sound,
-        target_impact_sound: Sound,
+        // target_impact_sound: Sound,
         position: (f32, f32),
     ) -> Self {
         Self {
             texture,
             shoot_sound,
-            target_impact_sound,
+            // target_impact_sound,
             position,
             size: (texture.width(), texture.height()),
             scale: 1.,

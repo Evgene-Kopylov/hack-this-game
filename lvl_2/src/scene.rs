@@ -14,13 +14,28 @@ use crate::{MainUnit, TargetUnit};
 use crate::projectile::Projectile;
 use crate::settings::*;
 
+
+struct Assets {
+    target_impact_sound: Sound,
+}
+
+impl Assets {
+    pub async fn new() -> Self {
+        let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
+        Self {
+            target_impact_sound,
+        }
+    }
+}
+
+
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
     projectiles: Vec<Projectile>,
     mouse_position: Vec2,
     dt: f32,
-
+    assets: Assets,
 }
 
 impl Scene {
@@ -38,21 +53,25 @@ impl Scene {
         let mouse_position: Vec2 = mouse_position().into();
         let dt = get_frame_time();
 
+        let assets = Assets::new().await;
+
         Self {
             main_unit: MainUnit::new(
                 main_unit_texture,
                 shoot_sound,
-                target_impact_sound,
+                // target_impact_sound,
                 spawn_position
             ),
             target_unit: TargetUnit::new(
                 target_unit_texture,
                 target_unit_shadow_texture,
+                target_impact_sound,
                 target_unit_position
             ),
             projectiles: Vec::new(),
             mouse_position,
             dt,
+            assets,
         }
     }
 
@@ -91,25 +110,16 @@ impl Scene {
             if (self.projectiles[i].position.0 - self.target_unit.position.0).powf(2f32) +
                 (self.projectiles[i].position.1 - self.target_unit.position.1).powf(2f32)
                 < self.target_unit.radius.powf(2f32) {
-                info!("Hit");
                 self.projectiles[i].alive = false;
-                let target_impact = true;
-                let impact_angle = self.projectiles[i].rotation;
-                self.target_unit.update(self.dt, true, self.projectiles[i].rotation);
+                self.target_unit.update(
+                    true,
+                    self.projectiles[i].rotation,
+                    self.assets.target_impact_sound
+                );
             }
-            //     let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-            //     sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
-            //     audio::play_sound(self.target_impact_sound, sound_params);
-            //     target_impact = true;
-            //     impact_angle = self.projectiles[i].rotation;
-            //     self.projectiles[i].alive = false;
-            // } else {
-                self.projectiles[i].update(self.dt);
-            // }
+
+            self.projectiles[i].update(self.dt);
         }
-
-        // self.target_unit.update()
-
     }
 
     pub fn draw(&self) {
