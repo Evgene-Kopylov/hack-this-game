@@ -14,14 +14,15 @@ pub struct Projectile {
 
 
 impl Projectile {
-    pub fn new(
-        texture: Texture2D,
+    pub async fn new(
         rotation: f32,
         position: (f32, f32),
-        size: (f32, f32),
         speed: f32
-    ) -> Projectile {
-        Projectile {
+    ) -> Self {
+        let texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
+
+        let size = (texture.width(), texture.height());
+        Self {
             texture,
             rotation,
             start_position: position,

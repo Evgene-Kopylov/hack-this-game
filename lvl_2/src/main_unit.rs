@@ -24,8 +24,6 @@ pub struct MainUnit {
     pub rotation: f32,
     pub position: (f32, f32),
     pub speed: f32,
-    pub projectile_texture: Texture2D,
-    pub projectiles: Vec<Projectile>,
     shoot_timer: f32,
     shoot_delay: f32,
     shoot_range: f32,
@@ -37,19 +35,20 @@ pub struct MainUnit {
 impl MainUnit {
     pub fn new(
         texture: Texture2D,
-        projectile_texture: Texture2D,
         shoot_sound: Sound,
         target_impact_sound: Sound,
         position: (f32, f32),
     ) -> Self {
         Self {
-            texture, projectile_texture, shoot_sound, target_impact_sound, position,
+            texture,
+            shoot_sound,
+            target_impact_sound,
+            position,
             size: (texture.width(), texture.height()),
             scale: 1.,
             radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
             speed: MAIN_UNIT_SPEED,
-            projectiles: Vec::new(),
             shoot_timer: 0.,
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
@@ -60,8 +59,9 @@ impl MainUnit {
 
     // Возвращает сигнал о попадании в цель
     pub fn update(&mut self, dt: f32, mouse_position: Vec2, target_pos: (f32, f32), target_rad: f32
-    ) -> (bool, f32) {
+    ) -> bool {
         self.shoot_timer += dt;
+        self.command = Command::None;
         self.tick += dt;
         if self.tick >= 1. {
             self.tick = 0.;
@@ -90,7 +90,6 @@ impl MainUnit {
 
         }
 
-        // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
             x_move -= 1f32;
@@ -144,66 +143,53 @@ impl MainUnit {
 
         if (is_mouse_button_down(MouseButton::Left) || self.command == Command::Shoot)
             && self.shoot_timer >= self.shoot_delay {
-            let size = (
-                self.projectile_texture.width(), self.projectile_texture.height());
-            let speed = self.speed * 3.;
-            let position = (  // точка появления выстрела
-                self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
-                self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
-            );
-
-            let projectile = Projectile::new(
-                self.projectile_texture,
-                self.rotation,
-                position,
-                size,
-                speed
-            );
-            self.projectiles.push(projectile);
             self.shoot_timer = 0.;
+            self.command = Command::Shoot;
             let mut sound_params: PlaySoundParams = PlaySoundParams::default();
             sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
             audio::play_sound(self.shoot_sound, sound_params);
+            // return projectile
         }
+        if self.command == Command::Shoot { true } else { false }
 
-        // удаление снарядов на отлете
-        self.projectiles.retain(
-            |p|
-                ((p.start_position.0 - p.position.0).powf(2f32)
-                    + (p.start_position.1 - p.position.1).powf(2f32)
-                    < self.shoot_range.powf(2f32)) && p.alive);
-
-        let mut target_impact= false;
-        let mut impact_angle = 0.;
-
-        for i in 0..self.projectiles.len() {
-            if (self.projectiles[i].position.0 - target_pos.0).powf(2f32) +
-                (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
-                < target_rad.powf(2f32) {
-                let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-                sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
-                audio::play_sound(self.target_impact_sound, sound_params);
-                target_impact = true;
-                impact_angle = self.projectiles[i].rotation;
-                self.projectiles[i].alive = false;
-            } else {
-                self.projectiles[i].position.0 +=
-                    dt * self.projectiles[i].speed *
-                        (self.projectiles[i].rotation - f32::to_radians(90.)).cos();
-                self.projectiles[i].position.1 +=
-                    dt * self.projectiles[i].speed *
-                        (self.projectiles[i].rotation - f32::to_radians(90.)).sin();
-            }
-        }
-        (target_impact, impact_angle)
+        // // удаление снарядов на отлете
+        // self.projectiles.retain(
+        //     |p|
+        //         ((p.start_position.0 - p.position.0).powf(2f32)
+        //             + (p.start_position.1 - p.position.1).powf(2f32)
+        //             < self.shoot_range.powf(2f32)) && p.alive);
+        //
+        // let mut target_impact= false;
+        // let mut impact_angle = 0.;
+        //
+        // for i in 0..self.projectiles.len() {
+        //     if (self.projectiles[i].position.0 - target_pos.0).powf(2f32) +
+        //         (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
+        //         < target_rad.powf(2f32) {
+        //         let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+        //         sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
+        //         audio::play_sound(self.target_impact_sound, sound_params);
+        //         target_impact = true;
+        //         impact_angle = self.projectiles[i].rotation;
+        //         self.projectiles[i].alive = false;
+        //     } else {
+        //         self.projectiles[i].position.0 +=
+        //             dt * self.projectiles[i].speed *
+        //                 (self.projectiles[i].rotation - f32::to_radians(90.)).cos();
+        //         self.projectiles[i].position.1 +=
+        //             dt * self.projectiles[i].speed *
+        //                 (self.projectiles[i].rotation - f32::to_radians(90.)).sin();
+        //     }
+        // }
+        // (target_impact, impact_angle)
 
     }
 
     pub fn draw(&self) {
         // Выстрелы
-        for projectile in &self.projectiles {
-            projectile.draw();
-        }
+        // for projectile in &self.projectiles {
+        //     projectile.draw();
+        // }
         // тень
         draw_texture_ex(
             self.texture,
