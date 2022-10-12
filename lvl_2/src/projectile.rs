@@ -1,3 +1,5 @@
+use macroquad::audio;
+use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
 use crate::settings::*;
 
@@ -16,10 +18,16 @@ pub struct Projectile {
 impl Projectile {
     pub fn new(
         texture: Texture2D,
+        shoot_sound: Sound,
         rotation: f32,
         position: (f32, f32),
         speed: f32
     ) -> Self {
+
+        let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+        sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
+        audio::play_sound(shoot_sound, sound_params);
+
         let size = (texture.width(), texture.height());
         Self {
             texture,

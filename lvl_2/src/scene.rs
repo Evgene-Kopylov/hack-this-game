@@ -1,10 +1,12 @@
 use macroquad::input::{is_key_down, KeyCode};
+use macroquad::miniquad::info;
 use macroquad::prelude::{mouse_position, screen_height, screen_width, Vec2};
 use macroquad::time::get_frame_time;
 use crate::{MainUnit, TargetUnit};
 use crate::projectile::Projectile;
 use crate::assets::Assets;
 use crate::order::Order;
+use crate::utils::get_parameter_value;
 
 pub struct Scene {
     main_unit: MainUnit,
@@ -83,7 +85,8 @@ impl Scene {
     }
 
     pub fn update_order_from_url_query(&mut self) {
-
+        let c = get_parameter_value("command");
+        info!("{}", c);
     }
 
     pub fn update(&mut self) {
@@ -109,6 +112,7 @@ impl Scene {
 
             let projectile = Projectile::new(
                 self.assets.projectile_texture,
+                self.assets.main_unit_shoot_sound,
                 self.main_unit.rotation,
                 position,
                 self.main_unit.speed * 3.,

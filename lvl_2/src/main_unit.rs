@@ -101,10 +101,8 @@ impl MainUnit {
             && self.shoot_timer >= self.shoot_delay {
             self.shoot_timer = 0.;
             self.order.shoot = true;
-            let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-            sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
-            audio::play_sound(self.shoot_sound, sound_params);
-            // return projectile
+        } else {
+            self.order.shoot = false;
         }
         self.order.shoot
     }
