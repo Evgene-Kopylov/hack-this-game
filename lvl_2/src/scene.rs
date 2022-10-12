@@ -1,5 +1,5 @@
 use macroquad::audio::{load_sound, Sound};
-use macroquad::prelude::{load_texture, screen_height, screen_width, Texture2D, Vec2};
+use macroquad::prelude::{info, load_texture, screen_height, screen_width, Texture2D, Vec2};
 use crate::{MainUnit, TargetUnit};
 use crate::settings::*;
 
@@ -10,7 +10,7 @@ pub struct Scene {
 
 impl Scene {
     pub async fn new() -> Self {
-        // info!("WASM LOG: Начало загрузки текстур");
+        info!("WASM LOG: Начало загрузки текстур");
         let main_unit_texture: Texture2D = load_texture(MAIN_UNIT_TEXTURE_PATH).await.unwrap();
         let projectile_texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
         let shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
@@ -19,7 +19,7 @@ impl Scene {
         let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
         let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();
         let target_unit_position = (screen_width() * 0.5, 160.);
-        // info!("WASM LOG: Текстуры загружены");
+        info!("WASM LOG: Текстуры загружены");
 
         Self {
             main_unit: MainUnit::new(
