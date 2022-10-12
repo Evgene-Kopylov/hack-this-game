@@ -15,6 +15,7 @@ pub struct MainUnit {
     shoot_timer: f32,
     shoot_delay: f32,
     pub shoot_range: f32,
+    auto_aim: bool,
 }
 
 
@@ -34,6 +35,7 @@ impl MainUnit {
             shoot_timer: 0.,
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
+            auto_aim: false,
         }
     }
 
@@ -44,6 +46,9 @@ impl MainUnit {
         self.position.0 += order.wasd.x * dt * self.speed;
         self.position.1 += order.wasd.y * dt * self.speed;
 
+        if order.wasd.x != 0. || order.wasd.y != 0. || is_mouse_button_down(MouseButton::Left) {
+            self.auto_aim = false;
+        }
 
         // поворот в сторону курсора
         self.rotation = self.rotation % f32::to_radians(360.);
@@ -55,11 +60,14 @@ impl MainUnit {
 
         if order.shoot && !(is_mouse_button_down(MouseButton::Left)) {
             self.rotation = order.rotation;
+            self.auto_aim = true;
         } else {
-            if dx >= 0f32 {
-                self.rotation = (dy / dx).atan() - f32::to_radians(90.);
-            } else {
-                self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+            if !self.auto_aim {
+                if dx >= 0f32 {
+                    self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+                } else {
+                    self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+                }
             }
         }
 
