@@ -1,11 +1,20 @@
 use macroquad::audio::{load_sound, Sound};
-use macroquad::prelude::{info, load_texture, screen_height, screen_width, Texture2D, Vec2};
+use macroquad::prelude::{
+    info,
+    load_texture,
+    mouse_position,
+    screen_height,
+    screen_width,
+    Texture2D,
+    Vec2
+};
 use crate::{MainUnit, TargetUnit};
 use crate::settings::*;
 
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
+    mouse_position: Vec2
 }
 
 impl Scene {
@@ -21,6 +30,8 @@ impl Scene {
         let target_unit_position = (screen_width() * 0.5, 160.);
         info!("WASM LOG: Текстуры загружены");
 
+        let mouse_position: Vec2 = mouse_position().into();
+
         Self {
             main_unit: MainUnit::new(
                 main_unit_texture,
@@ -33,15 +44,17 @@ impl Scene {
                 target_unit_texture,
                 target_unit_shadow_texture,
                 target_unit_position
-            )
+            ),
+            mouse_position
         }
     }
 
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
+    pub fn update(&mut self, dt: f32) {
         self.target_unit.shift = (0., 0.);
+        self.mouse_position = mouse_position().into();
         let (target_impact, impact_angle) = self.main_unit.update(
             dt,
-            mouse_position,
+            self.mouse_position,
             self.target_unit.position,
             self.target_unit.texture.width() / 2.
         );

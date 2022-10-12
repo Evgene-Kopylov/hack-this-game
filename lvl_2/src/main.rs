@@ -20,8 +20,7 @@ async fn main() {
     let mut scene = Scene::new().await;
 
     loop {
-        let mouse_position: Vec2 = mouse_position().into();
-        scene.update(get_frame_time(), mouse_position);
+        scene.update(get_frame_time());
         clear_background(GROUND_COLOR);
         scene.draw();
         next_frame().await
