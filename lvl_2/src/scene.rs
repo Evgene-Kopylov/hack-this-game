@@ -93,8 +93,8 @@ impl Scene {
                 set_program_parameter("command", "");
                 // info!("Shoot");
             }
-            false => {}        }
-
+            false => {}
+        }
     }
 
     fn set_parameters_to_url_query(&mut self) {
@@ -117,13 +117,12 @@ impl Scene {
         self.target_unit.shift = (0., 0.);
         self.mouse_position = mouse_position().into();
 
-
-        let shoot= self.main_unit.update(
+        self.main_unit.update(
             self.dt,
             self.mouse_position,
-            &self.order,
+            &mut self.order,
         );
-        if shoot {
+        if self.order.shoot {
             let position = (  // точка появления выстрела
                 self.main_unit.position.0 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).cos(),
                 self.main_unit.position.1 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).sin()

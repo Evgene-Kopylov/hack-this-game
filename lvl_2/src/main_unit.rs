@@ -20,7 +20,6 @@ pub struct MainUnit {
     shoot_timer: f32,
     shoot_delay: f32,
     pub shoot_range: f32,
-    order: Order,
 }
 
 
@@ -42,43 +41,38 @@ impl MainUnit {
             shoot_timer: 0.,
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
-            order: Order::new(),
         }
     }
 
     // Возвращает сигнал о попадании в цель
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2, order: &Order) -> bool {
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2, order: &mut Order) {
         self.shoot_timer += dt;
 
         self.position.0 += order.wasd.x * dt * self.speed;
         self.position.1 += order.wasd.y * dt * self.speed;
 
-        // if !self.order.shoot {
 
-            // поворот в сторону курсора
-            self.rotation = self.rotation % f32::to_radians(360.);
-            let mut dx = self.position.0 - mouse_position.x;
-            if dx == 0f32 { dx += 1f32; };
+        // поворот в сторону курсора
+        self.rotation = self.rotation % f32::to_radians(360.);
+        let mut dx = self.position.0 - mouse_position.x;
+        if dx == 0f32 { dx += 1f32; };
 
-            let mut dy = self.position.1 - mouse_position.y;
-            if dy == 0f32 { dy += 1f32; };
+        let mut dy = self.position.1 - mouse_position.y;
+        if dy == 0f32 { dy += 1f32; };
 
-            if dx >= 0f32 {
-                self.rotation = (dy / dx).atan() - f32::to_radians(90.);
-            } else {
-                self.rotation = (dy / dx).atan() - f32::to_radians(270.);
-            }
+        if dx >= 0f32 {
+            self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+        } else {
+            self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+        }
 
-        // }
-
-        if (is_mouse_button_down(MouseButton::Left) || self.order.shoot)
+        if (is_mouse_button_down(MouseButton::Left) || order.shoot)
             && self.shoot_timer >= self.shoot_delay {
             self.shoot_timer = 0.;
-            self.order.shoot = true;
+            order.shoot = true;
         } else {
-            self.order.shoot = false;
+            order.shoot = false;
         }
-        self.order.shoot
     }
 
     pub fn draw(&self) {
