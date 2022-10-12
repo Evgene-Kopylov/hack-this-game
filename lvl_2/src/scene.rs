@@ -1,6 +1,7 @@
-use macroquad::audio::Sound;
-use macroquad::prelude::{Texture2D, Vec2};
+use macroquad::audio::{load_sound, Sound};
+use macroquad::prelude::{load_texture, screen_height, screen_width, Texture2D, Vec2};
 use crate::{MainUnit, TargetUnit};
+use crate::settings::*;
 
 pub struct Scene {
     main_unit: MainUnit,
@@ -8,17 +9,18 @@ pub struct Scene {
 }
 
 impl Scene {
-    pub fn new(
-        main_unit_texture: Texture2D,
-        projectile_texture: Texture2D,
-        shoot_sound: Sound,
-        target_impact_sound: Sound,
-        spawn_position: (f32, f32),
+    pub async fn new() -> Self {
+        // info!("WASM LOG: Начало загрузки текстур");
+        let main_unit_texture: Texture2D = load_texture(MAIN_UNIT_TEXTURE_PATH).await.unwrap();
+        let projectile_texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
+        let shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
+        let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
+        let spawn_position = (screen_width() * 0.5, screen_height() * 0.8);
+        let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
+        let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();
+        let target_unit_position = (screen_width() * 0.5, 160.);
+        // info!("WASM LOG: Текстуры загружены");
 
-        target_unit_texture: Texture2D,
-        target_unit_shadow_texture: Texture2D,
-        target_unit_position: (f32, f32),
-    ) -> Self {
         Self {
             main_unit: MainUnit::new(
                 main_unit_texture,
