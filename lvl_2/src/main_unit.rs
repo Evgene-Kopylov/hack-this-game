@@ -15,7 +15,8 @@ pub struct MainUnit {
     pub shoot_timer: f32,
     shoot_delay: f32,
     pub shoot_range: f32,
-    auto_aim: bool,
+    pub auto_aim: bool,
+    bullet_load: u8,
 }
 
 
@@ -36,6 +37,7 @@ impl MainUnit {
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
             shoot_range: MAIN_UNIT_SHOOT_RANGE,
             auto_aim: false,
+            bullet_load: 0,
         }
     }
 
@@ -58,9 +60,8 @@ impl MainUnit {
         let mut dy = self.position.1 - mouse_position.y;
         if dy == 0f32 { dy += 1f32; };
 
-        if order.shoot && !(is_mouse_button_down(MouseButton::Left)) {
+        if self.auto_aim {
             self.rotation = order.rotation;
-            self.auto_aim = true;
         } else {
             if !self.auto_aim {
                 if dx >= 0f32 {
@@ -71,10 +72,15 @@ impl MainUnit {
             }
         }
 
-        if (is_mouse_button_down(MouseButton::Left) || order.shoot)
+        if (is_mouse_button_down(MouseButton::Left) || order.shoot || self.bullet_load > 0)
             && self.shoot_timer >= self.shoot_delay {
             self.shoot_timer = 0.;
-            order.shoot = true;
+            if self.bullet_load > 0 {
+                order.shoot = true;
+                self.bullet_load -= 1;
+            } else {
+                self.bullet_load = 5;
+            }
         } else {
             order.shoot = false;
         }

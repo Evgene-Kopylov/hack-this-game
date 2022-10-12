@@ -91,6 +91,7 @@ impl Scene {
                 self.order.shoot = true;
                 set_program_parameter("command", "");
                 self.main_unit.shoot_timer = 1.;  // чтобы получить выстрел с минимальной задержкой
+                self.main_unit.auto_aim = true;
             }
             false => {}
         }
