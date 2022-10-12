@@ -90,7 +90,7 @@ impl Scene {
             true => {
                 self.order.shoot = true;
                 set_program_parameter("command", "");
-                // info!("Shoot");
+                self.main_unit.shoot_timer = 1.;  // чтобы получить выстрел с минимальной задержкой
             }
             false => {}
         }

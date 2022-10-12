@@ -12,7 +12,7 @@ pub struct MainUnit {
     pub rotation: f32,
     pub position: (f32, f32),
     pub speed: f32,
-    shoot_timer: f32,
+    pub shoot_timer: f32,
     shoot_delay: f32,
     pub shoot_range: f32,
     auto_aim: bool,
