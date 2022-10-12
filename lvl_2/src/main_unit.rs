@@ -55,26 +55,26 @@ impl MainUnit {
         self.shoot_timer += dt;
         self.order.shoot = false;
         self.tick += dt;
-        if self.tick >= 1. {
-            self.tick = 0.;
-            let case = String::from("Shoot");
-            let para = get_parameter_value("command");
-            if para == case {
-                self.order.shoot = true;
-            } else {
-                self.order.shoot = false;
-            }
-            set_program_parameter("command", "");
-
-            let rotation = get_parameter_value("rotation");
-
-            match rotation.parse::<f32>() {
-                Ok(a) => {
-                    self.rotation = a.to_radians();
-                }
-                Err(_) => {}
-            }
-        }
+        // if self.tick >= 1. {
+        //     self.tick = 0.;
+        //     let case = String::from("Shoot");
+        //     let para = get_parameter_value("command");
+        //     if para == case {
+        //         self.order.shoot = true;
+        //     } else {
+        //         self.order.shoot = false;
+        //     }
+        //     set_program_parameter("command", "");
+        //
+        //     let rotation = get_parameter_value("rotation");
+        //
+        //     match rotation.parse::<f32>() {
+        //         Ok(a) => {
+        //             self.rotation = a.to_radians();
+        //         }
+        //         Err(_) => {}
+        //     }
+        // }
 
         self.position.0 += order.wasd.x * dt * self.speed;
         self.position.1 += order.wasd.y * dt * self.speed;

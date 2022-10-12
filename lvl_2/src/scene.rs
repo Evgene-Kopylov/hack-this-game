@@ -84,15 +84,15 @@ impl Scene {
         self.order.wasd = Vec2::new(x_move, y_move);
     }
 
-    pub fn update_order_from_url_query(&mut self) {
-        let c = get_parameter_value("command");
-        info!("{}", c);
-    }
+    // pub fn update_order_from_url_query(&mut self) {
+    //     let c = get_parameter_value("command");
+    //     // info!("{}", c);
+    // }
 
     pub fn update(&mut self) {
         self.update_order_from_user_input();
 
-        self.update_order_from_url_query();
+        // self.update_order_from_url_query();
 
         self.dt = get_frame_time();
         self.target_unit.shift = (0., 0.);
