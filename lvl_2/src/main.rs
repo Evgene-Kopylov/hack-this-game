@@ -9,6 +9,7 @@ mod main_unit;
 mod target_unit;
 mod scene;
 mod utils;
+mod assets;
 
 use main_unit::*;
 use crate::scene::Scene;

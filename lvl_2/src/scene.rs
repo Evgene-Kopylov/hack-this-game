@@ -1,17 +1,13 @@
-use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::{
-    info,
-    load_texture,
     mouse_position,
     screen_height,
     screen_width,
-    Texture2D,
     Vec2
 };
 use macroquad::time::get_frame_time;
 use crate::{MainUnit, TargetUnit};
 use crate::projectile::Projectile;
-use crate::settings::*;
+use crate::assets::Assets;
 
 
 
@@ -21,39 +17,35 @@ pub struct Scene {
     projectiles: Vec<Projectile>,
     mouse_position: Vec2,
     dt: f32,
+    assets: Assets,
 }
 
 impl Scene {
     pub async fn new() -> Self {
-        info!("WASM LOG: Начало загрузки текстур");
-        let main_unit_texture: Texture2D = load_texture(MAIN_UNIT_TEXTURE_PATH).await.unwrap();
-        let shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
-        let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
         let spawn_position = (screen_width() * 0.5, screen_height() * 0.8);
-        let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
-        let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();
         let target_unit_position = (screen_width() * 0.5, 160.);
-        info!("WASM LOG: Текстуры загружены");
+
 
         let mouse_position: Vec2 = mouse_position().into();
         let dt = get_frame_time();
-
+        let assets = Assets::new().await;
 
         Self {
             main_unit: MainUnit::new(
-                main_unit_texture,
-                shoot_sound,
+                assets.main_unit_texture,
+                assets.main_unit_shoot_sound,
                 spawn_position
             ),
             target_unit: TargetUnit::new(
-                target_unit_texture,
-                target_unit_shadow_texture,
-                target_impact_sound,
+                assets.target_unit_texture,
+                assets.target_unit_shadow_texture,
+                assets.target_impact_sound,
                 target_unit_position
             ),
             projectiles: Vec::new(),
             mouse_position,
             dt,
+            assets,
         }
     }
 
@@ -72,10 +64,11 @@ impl Scene {
             );
 
             let projectile = Projectile::new(
+                self.assets.projectile_texture,
                 self.main_unit.rotation,
                 position,
                 self.main_unit.speed * 3.,
-            ).await;
+            );
             self.projectiles.push(projectile);
         }
 
