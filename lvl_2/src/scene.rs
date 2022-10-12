@@ -8,13 +8,15 @@ use macroquad::prelude::{
     Texture2D,
     Vec2
 };
+use macroquad::time::get_frame_time;
 use crate::{MainUnit, TargetUnit};
 use crate::settings::*;
 
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
-    mouse_position: Vec2
+    mouse_position: Vec2,
+    dt: f32,
 }
 
 impl Scene {
@@ -31,6 +33,7 @@ impl Scene {
         info!("WASM LOG: Текстуры загружены");
 
         let mouse_position: Vec2 = mouse_position().into();
+        let dt = get_frame_time();
 
         Self {
             main_unit: MainUnit::new(
@@ -45,15 +48,17 @@ impl Scene {
                 target_unit_shadow_texture,
                 target_unit_position
             ),
-            mouse_position
+            mouse_position,
+            dt,
         }
     }
 
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self) {
+        self.dt = get_frame_time();
         self.target_unit.shift = (0., 0.);
         self.mouse_position = mouse_position().into();
         let (target_impact, impact_angle) = self.main_unit.update(
-            dt,
+            self.dt,
             self.mouse_position,
             self.target_unit.position,
             self.target_unit.texture.width() / 2.

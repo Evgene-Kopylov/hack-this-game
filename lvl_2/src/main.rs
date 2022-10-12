@@ -20,7 +20,7 @@ async fn main() {
     let mut scene = Scene::new().await;
 
     loop {
-        scene.update(get_frame_time());
+        scene.update();
         clear_background(GROUND_COLOR);
         scene.draw();
         next_frame().await
