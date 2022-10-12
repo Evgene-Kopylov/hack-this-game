@@ -1,4 +1,3 @@
-use std::process::Command;
 use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::{
     info,
@@ -15,19 +14,6 @@ use crate::projectile::Projectile;
 use crate::settings::*;
 
 
-struct Assets {
-    target_impact_sound: Sound,
-}
-
-impl Assets {
-    pub async fn new() -> Self {
-        let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
-        Self {
-            target_impact_sound,
-        }
-    }
-}
-
 
 pub struct Scene {
     main_unit: MainUnit,
@@ -35,7 +21,6 @@ pub struct Scene {
     projectiles: Vec<Projectile>,
     mouse_position: Vec2,
     dt: f32,
-    assets: Assets,
 }
 
 impl Scene {
@@ -53,13 +38,11 @@ impl Scene {
         let mouse_position: Vec2 = mouse_position().into();
         let dt = get_frame_time();
 
-        let assets = Assets::new().await;
 
         Self {
             main_unit: MainUnit::new(
                 main_unit_texture,
                 shoot_sound,
-                // target_impact_sound,
                 spawn_position
             ),
             target_unit: TargetUnit::new(
@@ -71,7 +54,6 @@ impl Scene {
             projectiles: Vec::new(),
             mouse_position,
             dt,
-            assets,
         }
     }
 
@@ -82,11 +64,8 @@ impl Scene {
         let soot= self.main_unit.update(
             self.dt,
             self.mouse_position,
-            // self.target_unit.position,
-            // self.target_unit.texture.width() / 2.
         );
         if soot {
-            info!("Shoot");
             let position = (  // точка появления выстрела
                 self.main_unit.position.0 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).cos(),
                 self.main_unit.position.1 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).sin()
@@ -101,11 +80,11 @@ impl Scene {
         }
 
         // // удаление снарядов на отлете
-        self.projectiles.retain(
-            |p|
+        self.projectiles.retain(|p|
                 ((p.start_position.0 - p.position.0).powf(2f32)
                     + (p.start_position.1 - p.position.1).powf(2f32)
                     < self.main_unit.shoot_range.powf(2f32)) && p.alive);
+
         for i in 0..self.projectiles.len() {
             if (self.projectiles[i].position.0 - self.target_unit.position.0).powf(2f32) +
                 (self.projectiles[i].position.1 - self.target_unit.position.1).powf(2f32)
@@ -114,7 +93,6 @@ impl Scene {
                 self.target_unit.update(
                     true,
                     self.projectiles[i].rotation,
-                    self.assets.target_impact_sound
                 );
             }
 

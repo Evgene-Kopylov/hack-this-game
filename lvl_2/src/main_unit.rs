@@ -2,7 +2,6 @@ use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
 use quad_url::{set_program_parameter};
-use crate::projectile::*;
 use crate::settings::*;
 use crate::utils::{get_parameter_value};
 
@@ -17,7 +16,6 @@ enum Command {
 pub struct MainUnit {
     pub texture: Texture2D,
     pub shoot_sound: Sound,
-    // target_impact_sound: Sound,
     pub size: (f32, f32),
     pub scale: f32,
     pub radius: f32,
@@ -84,12 +82,6 @@ impl MainUnit {
                 }
                 Err(_) => {}
             }
-
-            // let line = format!("({}, {})", target_pos.0 as i32, target_pos.1 as i32);
-            // set_program_parameter("target_pos", line.as_str());
-            // let line = format!("({}, {})", self.position.0 as i32, self.position.1 as i32);
-            // set_program_parameter("unit_pos", line.as_str());
-
         }
 
         let mut x_move = 0f32;

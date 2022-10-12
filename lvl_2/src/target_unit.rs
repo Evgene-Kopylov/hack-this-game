@@ -1,8 +1,8 @@
 use macroquad::audio;
-use macroquad::audio::{load_sound, PlaySoundParams, Sound};
+use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::color::{BLACK, WHITE};
 use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D};
-use crate::{MAIN_UNIT_SHOOT_SOUND_VOLUME, TARGET_UNIT_IMPACT_SOUND};
+use crate::{MAIN_UNIT_SHOOT_SOUND_VOLUME};
 
 
 pub struct TargetUnit {
@@ -31,14 +31,14 @@ impl TargetUnit {
         }
     }
 
-    pub fn update(&mut self, impact: bool, impact_angle: f32, impact_sound: Sound) {
+    pub fn update(&mut self, impact: bool, impact_angle: f32) {
         if impact {
             let shift = 5.;
             self.shift = (shift * impact_angle.sin(), shift * impact_angle.cos());
 
             let mut sound_params: PlaySoundParams = PlaySoundParams::default();
             sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
-            audio::play_sound(impact_sound, sound_params);
+            audio::play_sound(self.impact_sound, sound_params);
 
         }
     }
