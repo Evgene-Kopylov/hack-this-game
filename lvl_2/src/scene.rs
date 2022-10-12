@@ -96,12 +96,12 @@ impl Scene {
         self.mouse_position = mouse_position().into();
 
 
-        let soot= self.main_unit.update(
+        let shoot= self.main_unit.update(
             self.dt,
             self.mouse_position,
             &self.order,
         );
-        if soot {
+        if shoot {
             let position = (  // точка появления выстрела
                 self.main_unit.position.0 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).cos(),
                 self.main_unit.position.1 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).sin()
