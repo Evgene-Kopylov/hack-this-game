@@ -79,7 +79,10 @@ impl MainUnit {
                 order.shoot = true;
                 self.bullet_load -= 1;
             } else {
-                self.bullet_load = 5;
+                self.bullet_load = 6;
+                if is_mouse_button_down(MouseButton::Left) {
+                    order.shoot = true;
+                }
             }
         } else {
             order.shoot = false;
