@@ -1,7 +1,7 @@
 use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::info;
 use macroquad::texture::{load_texture, Texture2D};
-use crate::settings::*;
+
 
 pub(crate) struct Assets {
     pub(crate) main_unit_texture: Texture2D,
@@ -17,14 +17,22 @@ pub(crate) struct Assets {
 impl Assets {
     pub async fn new() -> Self {
         info!("WASM LOG: Начало загрузки текстур");
-        let main_unit_texture: Texture2D = load_texture(MAIN_UNIT_TEXTURE_PATH).await.unwrap();
-        let main_unit_shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
-        let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
-        let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
-        let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();
-        let projectile_texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
-        let wall_block_texture = load_texture(WALL_BLOCK_TEXTURE_PATH).await.unwrap();
-        let wall_block_impact_sound: Sound = load_sound(WALL_BLOCK_IMPACT_SOUND_PATH).await.unwrap();
+        let main_unit_texture: Texture2D = load_texture(
+            "../assets/pointer/pointer_3.png").await.unwrap();
+        let main_unit_shoot_sound: Sound = load_sound(
+            "../assets/sound/4 XSA_Weapon.wav").await.unwrap();
+        let target_impact_sound: Sound = load_sound(
+            "../assets/sound/big-metal-knock-1.wav").await.unwrap();
+        let target_unit_texture = load_texture(
+            "../assets/pointer/target_unit_3_2.png").await.unwrap();
+        let target_unit_shadow_texture = load_texture(
+            "../assets/pointer/target_unit_3_shadow.png").await.unwrap();
+        let projectile_texture = load_texture(
+            "../assets/pointer/projectile_glow_7.png").await.unwrap();
+        let wall_block_texture = load_texture(
+            "../assets/wall/wall_50x15.png").await.unwrap();
+        let wall_block_impact_sound: Sound = load_sound(
+            "../assets/sound/hit-with-something.wav").await.unwrap();
         info!("WASM LOG: Текстуры загружены");
 
         Self {
