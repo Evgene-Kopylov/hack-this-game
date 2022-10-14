@@ -4,9 +4,9 @@ use crate::{PROJECTILE_COLOR, Vec2, Vec4, WALL_BLOCK_COLOR};
 
 pub struct WallBlock {
     texture: Texture2D,
-    position: Vec2,
+    pub(crate) position: Vec2,
     rotation: f32,
-    size: Vec2,
+    pub(crate) size: Vec2,
     shadow_color: Color,
 }
 
