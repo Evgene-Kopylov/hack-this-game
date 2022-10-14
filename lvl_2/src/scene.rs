@@ -178,6 +178,7 @@ impl Scene {
 
     pub fn draw(&self) {
         self.target_unit.draw_shadow();
+        self.wall_block.draw_shadow();
         self.main_unit.draw();
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();
