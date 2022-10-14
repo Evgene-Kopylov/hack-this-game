@@ -1,6 +1,8 @@
-use macroquad::color::{BLACK, Color, DARKGRAY};
+use macroquad::audio;
+use macroquad::audio::{PlaySoundParams, Sound};
+use macroquad::color::{BLACK, Color};
 use macroquad::texture::{draw_texture_ex, DrawTextureParams, Texture2D};
-use crate::{PROJECTILE_COLOR, Vec2, Vec4, WALL_BLOCK_COLOR};
+use crate::{Vec2, WALL_BLOCK_COLOR, WALL_BLOCK_IMPACT_SOUND_VOLUME};
 
 pub struct WallBlock {
     texture: Texture2D,
@@ -8,11 +10,13 @@ pub struct WallBlock {
     rotation: f32,
     pub(crate) size: Vec2,
     shadow_color: Color,
+    impact_sound: Sound,
 }
 
 impl WallBlock {
     pub fn new(
         texture: Texture2D,
+        impact_sound: Sound,
         position: Vec2,
         rotation: f32,
     ) -> Self {
@@ -21,10 +25,19 @@ impl WallBlock {
 
         Self {
             texture,
+            impact_sound,
             position,
             rotation,
             size: Vec2::new(texture.width(), texture.height()),
             shadow_color,
+        }
+    }
+
+    pub fn update(&mut self, impact: bool) {
+        if impact {
+            let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+            sound_params.volume = WALL_BLOCK_IMPACT_SOUND_VOLUME * 0.35;
+            audio::play_sound(self.impact_sound, sound_params);
         }
     }
 

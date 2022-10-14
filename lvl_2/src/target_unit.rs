@@ -2,7 +2,7 @@ use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::color::{BLACK, WHITE};
 use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D};
-use crate::{MAIN_UNIT_SHOOT_SOUND_VOLUME, Vec2};
+use crate::{TARGET_UNIT_IMPACT_SOUND_VOLUME, Vec2};
 
 
 pub struct TargetUnit {
@@ -37,7 +37,7 @@ impl TargetUnit {
             self.shift = Vec2::new(shift * impact_angle.sin(), shift * impact_angle.cos());
 
             let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-            sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
+            sound_params.volume = TARGET_UNIT_IMPACT_SOUND_VOLUME;
             audio::play_sound(self.impact_sound, sound_params);
 
         }

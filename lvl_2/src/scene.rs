@@ -1,5 +1,4 @@
 use macroquad::input::{is_key_down, KeyCode};
-use macroquad::miniquad::info;
 use macroquad::prelude::{mouse_position, screen_height, screen_width, Vec2};
 use macroquad::time::get_frame_time;
 use quad_url::set_program_parameter;
@@ -46,6 +45,7 @@ impl Scene {
             projectiles: Vec::new(),
             wall_block: WallBlock::new(
                 assets.wall_block_texture,
+                assets.wall_block_impact_sound,
                 Vec2::new(screen_width() * 0.5, screen_height() * 0.5),
                 0.,
             ),
@@ -171,6 +171,9 @@ impl Scene {
             && p.position.y < wall.position.y + 0.5 * wall.size.y
             {
                 p.alive = false;
+                self.wall_block.update(
+                    true,
+                )
 
             } else if (p.position.x - self.target_unit.position.x).powf(2f32) +
                 (p.position.y - self.target_unit.position.y).powf(2f32)
