@@ -17,6 +17,6 @@ pub const TARGET_UNIT_IMPACT_SOUND: &str = "../assets/sound/big-metal-knock-1.wa
 pub const TARGET_UNIT_IMPACT_SOUND_VOLUME: f32 = 0.045;
 
 pub const WALL_BLOCK_COLOR: Color = Color::new(0.29, 0.29, 0.29, 1.00);
-pub const WALL_BLOCK_TEXTURE_PATH: &str = "../assets/wall/wall_50x20.png";
+pub const WALL_BLOCK_TEXTURE_PATH: &str = "../assets/wall/wall_50x15.png";
 pub const WALL_BLOCK_IMPACT_SOUND_PATH: &str = "../assets/sound/hit-with-something.wav";
 pub const WALL_BLOCK_IMPACT_SOUND_VOLUME: f32 = 0.26;
