@@ -1,6 +1,6 @@
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
-use macroquad::color::{BLACK, WHITE};
+use macroquad::color::{BLACK, GREEN, WHITE};
 use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D};
 use crate::{TARGET_UNIT_IMPACT_SOUND_VOLUME, Vec2};
 
@@ -38,29 +38,40 @@ impl TargetUnit {
     pub fn update(&mut self, impact: bool, hit_points: f32, impact_angle: f32) {
         self.hit_points += hit_points;
 
-        if self.hit_points <= 0. {
-            self.alive = false;
-        } else if impact {
+        if impact {
+            if self.hit_points <= 0. {
+                self.alive = false;
+            }
+
             let shift = 5.;
             self.shift = Vec2::new(shift * impact_angle.sin(), shift * impact_angle.cos());
-
             let mut sound_params: PlaySoundParams = PlaySoundParams::default();
             sound_params.volume = TARGET_UNIT_IMPACT_SOUND_VOLUME;
-            audio::play_sound(self.impact_sound, sound_params);
+
+            if self.alive {
+                audio::play_sound(self.impact_sound, sound_params);
+            } else {
+                self.shift *= 0.4;
+                sound_params.volume *= 0.25;
+                audio::play_sound(self.impact_sound, sound_params);
+            }
 
         }
     }
 
-    pub fn draw_destruction(&self) {
-
-    }
-
     pub fn draw(&self) {
+        let color;
+        if self.alive {
+            color = WHITE;
+        } else {
+            color = GREEN;
+        }
+
         draw_texture_ex(
             self.texture,
             self.position.x - self.texture.width() * 0.5 + self.shift.x,
             self.position.y - self.texture.height() * 0.5 - self.shift.y,
-            WHITE,
+            color,
             DrawTextureParams {
                 ..Default::default()
             }
