@@ -1,5 +1,5 @@
 use macroquad::input::{is_key_down, KeyCode};
-use macroquad::prelude::{mouse_position, screen_height, screen_width, Vec2};
+use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2};
 use macroquad::time::get_frame_time;
 use quad_url::set_program_parameter;
 use crate::{MainUnit, TargetUnit};
@@ -155,7 +155,8 @@ impl Scene {
             self.projectiles.push(projectile);
         }
 
-        // удаление снарядов на отлете
+        // удаление объектов
+        // снаряды на отлете
         self.projectiles.retain(|p|
                 ((p.start_position.x - p.position.x).powf(2f32)
                     + (p.start_position.y - p.position.y).powf(2f32)
@@ -181,8 +182,10 @@ impl Scene {
                 p.alive = false;
                 self.target_unit.update(
                     true,
+                    -10.,
                     p.rotation,
                 );
+                info!("target_unit.hit_points: {:?}", self.target_unit.hit_points);
             }
 
             p.update(self.dt);

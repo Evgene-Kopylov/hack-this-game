@@ -13,6 +13,8 @@ pub struct TargetUnit {
     pub radius: f32,
     pub shift: Vec2,
     impact_sound: Sound,
+    pub(crate) hit_points: f32,
+    alive: bool,
 }
 
 impl TargetUnit {
@@ -27,12 +29,18 @@ impl TargetUnit {
             position: spawn_position,
             radius: texture.width() * 0.5,
             shift: Vec2::new(0., 0.),
-            impact_sound
+            impact_sound,
+            hit_points: 100.,
+            alive: true,
         }
     }
 
-    pub fn update(&mut self, impact: bool, impact_angle: f32) {
-        if impact {
+    pub fn update(&mut self, impact: bool, hit_points: f32, impact_angle: f32) {
+        self.hit_points += hit_points;
+
+        if self.hit_points <= 0. {
+            self.alive = false;
+        } else if impact {
             let shift = 5.;
             self.shift = Vec2::new(shift * impact_angle.sin(), shift * impact_angle.cos());
 
@@ -41,6 +49,10 @@ impl TargetUnit {
             audio::play_sound(self.impact_sound, sound_params);
 
         }
+    }
+
+    pub fn draw_destruction(&self) {
+
     }
 
     pub fn draw(&self) {
