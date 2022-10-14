@@ -72,20 +72,27 @@ impl MainUnit {
             }
         }
 
-        if (is_mouse_button_down(MouseButton::Left) || order.shoot || self.bullet_load > 0)
-            && self.shoot_timer >= self.shoot_delay {
-            self.shoot_timer = 0.;
-            if self.bullet_load > 0 {
+        // Управление огнем
+        if self.shoot_timer >= self.shoot_delay {
+            if is_mouse_button_down(MouseButton::Left) {  // ЛКМ
+                order.shoot = true;
+                self.bullet_load = 0;
+
+            } else if order.shoot { // команда
+                order.shoot = true;
+                self.bullet_load = 6;
+
+            } else if self.bullet_load > 0 { // очередь
                 order.shoot = true;
                 self.bullet_load -= 1;
-            } else {
-                self.bullet_load = 6;
-                if is_mouse_button_down(MouseButton::Left) {
-                    order.shoot = true;
-                }
             }
+
         } else {
             order.shoot = false;
+        }
+
+        if order.shoot {
+            self.shoot_timer = 0.;
         }
     }
 
