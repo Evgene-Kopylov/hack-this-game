@@ -11,6 +11,7 @@ mod scene;
 mod utils;
 mod assets;
 mod order;
+mod wall;
 
 use main_unit::*;
 use crate::scene::Scene;

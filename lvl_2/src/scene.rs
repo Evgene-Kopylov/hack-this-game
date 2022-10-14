@@ -8,11 +8,13 @@ use crate::projectile::Projectile;
 use crate::assets::Assets;
 use crate::order::Order;
 use crate::utils::get_parameter_value;
+use crate::wall::WallBlock;
 
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
     projectiles: Vec<Projectile>,
+    wall_block: WallBlock,
     mouse_position: Vec2,
     dt: f32,
     assets: Assets,
@@ -42,6 +44,11 @@ impl Scene {
                 target_unit_position
             ),
             projectiles: Vec::new(),
+            wall_block: WallBlock::new(
+                assets.wall_block_texture,
+                Vec2::new(screen_width() * 0.5, screen_height() * 0.5),
+                0.,
+            ),
             mouse_position,
             dt,
             assets,
@@ -176,6 +183,7 @@ impl Scene {
             self.projectiles[i].draw();
         }
         self.target_unit.draw();
+        self.wall_block.draw()
     }
 
 }

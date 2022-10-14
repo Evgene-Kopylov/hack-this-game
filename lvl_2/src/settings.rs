@@ -1,3 +1,4 @@
+use macroquad::color::SKYBLUE;
 use macroquad::prelude::Color;
 
 
@@ -14,3 +15,6 @@ pub const MAIN_UNIT_TEXTURE_PATH: &str = "../assets/pointer/pointer_3.png";
 pub const TARGET_UNIT_TEXTURE_PATH: &str = "../assets/pointer/target_unit_3_2.png";
 pub const TARGET_UNIT_SHADOW_TEXTURE_PATH: &str = "../assets/pointer/target_unit_3_shadow.png";
 pub const TARGET_UNIT_IMPACT_SOUND: &str = "../assets/sound/hit-with-something.wav";
+
+pub const WALL_BLOCK_COLOR: Color = Color::new(0.29, 0.27, 0.22, 1.00);
+pub const WALL_BLOCK_TEXTURE_PATH: &str = "../assets/wall/wall_50x20.png";
