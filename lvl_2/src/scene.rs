@@ -107,7 +107,7 @@ impl Scene {
             Ok(a) => {
                 self.order.rotation = a.to_radians();
             }
-            Err(_e) => {
+            Err(_) => {
                 // info!("{}", _e);
             }
         }
@@ -163,11 +163,12 @@ impl Scene {
 
         for i in 0..self.projectiles.len() {
             let p = &mut self.projectiles[i];
+            let wall = &self.wall_block;
 
-            if p.position.x > self.wall_block.position.x - 0.5 * self.wall_block.size.x
-            && p.position.x < self.wall_block.position.x + 0.5 * self.wall_block.size.x
-            && p.position.y > self.wall_block.position.y - 0.5 * self.wall_block.size.y
-            && p.position.y < self.wall_block.position.y + 0.5 * self.wall_block.size.y
+            if p.position.x > wall.position.x - 0.5 * wall.size.x
+            && p.position.x < wall.position.x + 0.5 * wall.size.x
+            && p.position.y > wall.position.y - 0.5 * wall.size.y
+            && p.position.y < wall.position.y + 0.5 * wall.size.y
             {
                 p.alive = false;
 
