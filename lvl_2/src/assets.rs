@@ -22,7 +22,7 @@ impl Assets {
         let main_unit_shoot_sound: Sound = load_sound(
             "../assets/sound/4 XSA_Weapon.wav").await.unwrap();
         let target_impact_sound: Sound = load_sound(
-            "../assets/sound/big-metal-knock-1.wav").await.unwrap();
+            "../assets/sound/hit-with-something.wav").await.unwrap();
         let target_unit_texture = load_texture(
             "../assets/pointer/target_unit_3_2.png").await.unwrap();
         let target_unit_shadow_texture = load_texture(
