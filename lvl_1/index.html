@@ -40,6 +40,12 @@
       margin: 10px auto;
     }
 
+    #game_container {
+      width: 100%;
+      object-fit: scale-down;
+
+    }
+
     #sidebar {
       color: gray;
       font-size: 3ch;
@@ -70,8 +76,10 @@
     </script>
 
   </div>
+  <div id="game_container">
+    <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
+  </div>
 
-  <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
 </div>
 
 <div class="h-full overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
