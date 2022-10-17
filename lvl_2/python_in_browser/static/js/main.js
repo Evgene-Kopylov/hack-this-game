@@ -13,21 +13,33 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
               matchBrackets: true,
             });
 // set the initial value of the editor
-editor.setValue(`# import math
-import numpy as np
+editor.setValue(`# import numpy as np
+
+
+class Command:
+    move_to: (int, int)
+    shoot_to: (int, int)
+
 
 def function(
-    target_pos: (int, int),
-    unit_pos: (int, int)
-) -> float:
+        unit_pos: (int, int),
+        target_pos: (int, int),
+) -> Command:
     """
-    Расчёт угла поворота по двум точкам.
-    
-    @param target_pos: координаты мишени 
-    @param unit_pos: координаты юнита 
-    @return: угол поворота в градусах.
+    @param unit_pos: координаты юнита
+    @param target_pos: координаты мишени
+    @return: куда идти, куда стрелять
     """
-    return np.random.randint(-180, +180)
+
+    c = Command()
+    c.move_to = target_pos
+    c.shoot_to = target_pos
+    return c
+
+
+if __name__ == "__main__":
+    c = function((100, 100), (200, 200))
+    print(c.shoot_to, c.shoot_to)
 
 `);
 output.value = "Initializing...\n";
@@ -113,7 +125,8 @@ print(rotation)
 
         // let command = result[1];
         // setParameter("command", command.toString().trim());
-        setParameter("command", "Shoot");
+        // setParameter("move_x", "100");
+        // setParameter("move_y", "200");
   } catch (err) {
     addToOutput(err);
   }

@@ -121,7 +121,29 @@ impl Scene {
         set_program_parameter("unit_pos", line.as_str());
     }
 
+    // fn get_parameters(&self) -> Vec2 {
+    //     let mut x = 0;
+    //     let mut y = 0;
+    //     match get_parameter_value("move_x").parse::<i32>() {
+    //         Ok(_x) => {
+    //             info!("x: {:?}", _x);
+    //             x = _x;
+    //         },
+    //         Err(_) => {}
+    //     }
+    //     match get_parameter_value("move_y").parse::<i32>() {
+    //         Ok(_y) => {
+    //             info!("x: {:?}", _y);
+    //             y = _y;
+    //         },            Err(_) => {}
+    //     }
+    //     Vec2::new(x as f32, y as f32)
+    //
+    // }
+
     pub fn update(&mut self) {
+        // let move_command = self.get_parameters();
+        // info!("{:?}", move_command);
         self.tick += self.dt;
         self.update_order_from_user_input();
 
