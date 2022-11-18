@@ -12,11 +12,14 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
               indentUnit: 4,
               matchBrackets: true,
             });
+
+const function_name = "unit_rotation";
+
 // set the initial value of the editor
 editor.setValue(`# import math
 import numpy as np
 
-def function(
+def ${function_name}(
     target_pos: (int, int),
     unit_pos: (int, int)
 ) -> float:
@@ -34,9 +37,8 @@ output.value = "Initializing...\n";
 
 // Add pyodide returned value to the output
 function addToOutput(stdout) {
-  output.value += ">>>\n" + stdout;
+  output.value += stdout;
   output.scrollTop = output.scrollHeight;
-  output.value += "\n";
 }
 
 // Clean the output section
@@ -102,13 +104,13 @@ unit_pos = ${unit_pos}
         `);
         pyodide.runPython(`
 ${editor.getValue()}    
-rotation = function(target_pos, unit_pos)
+rotation = ${function_name}(target_pos, unit_pos)
 print(rotation)
 # print(command)
         `);
         let stdout = pyodide.runPython("sys.stdout.getvalue()");
         let result = stdout.toString().trim().split("\n")
-        addToOutput(stdout);
+        addToOutput(`>>> ${function_name}(${target_pos}, ${unit_pos})\n` + stdout);
 
         let rotation = result[0];
         setParameter("rotation", rotation.toString().trim());
