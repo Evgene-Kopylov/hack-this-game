@@ -28,14 +28,20 @@
   <style>
 
     body {
-      color: white;
+
+        --cell-width: calc(50vw - 10px);
+        --bot-cell-min-heigt: 200px;
+
+      color: rgb(173, 173, 173);
       background: black;
+
+
     }
 
     .CodeMirror {
       height: 100%;
         width: 100%;
-        min-height: 720px;
+        /*min-height: var(--cell-width);*/
 
     }
 
@@ -44,15 +50,19 @@
     }
 
     td > div {
-      background: #202531;
       margin-top: 4px;
-      min-width: 720px;
+      min-width: var(--cell-width);
         border: 2px solid #262C3B;
+    }
+
+    .CodeMirror-scroll, td > div {
+        background: #202531;
+
     }
 
     .ide-code {
         height: 100%;
-        min-height: 720px;
+        min-height: var(--cell-width);
     }
 
     #code {
@@ -60,8 +70,8 @@
     }
 
     .game_window {
-      width: 720px;
-      height: 720px;
+      width: var(--cell-width);
+      height: var(--cell-width);
     }
 
     /*#game_container {*/
@@ -71,7 +81,13 @@
     #output {
       background: black;
         width: 100%;
-      min-height: 200px;
+      min-height: var(--bot-cell-min-heigt);
+    }
+
+    .tests {
+        min-height: calc(var(--bot-cell-min-heigt) + 5px);
+
+
     }
 
   </style>
@@ -103,9 +119,7 @@
         <div id="game_container">
           <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
         </div>
-        <div>
-          <textarea readonly class="" id="output" name="output"></textarea>
-        </div>
+
 
 <!--      </div>-->
     </td>
@@ -116,15 +130,27 @@
             <textarea id="code" name="code" class="h-full"></textarea>
         </div>
 
-      <div>
-        <!-- run button to pass the code to pyodide.runPython() -->
-        <button onclick="evaluatePython()" type="button" class="">Тест</button>
-        <!-- clean the output section -->
-        <button onclick="clearHistory()" type="button" class="">CLS</button>
-      </div>
+
     </td>
 
   </tr>
+    <tr>
+        <td>
+            <div>
+                <textarea readonly class="" id="output" name="output"></textarea>
+            </div>
+        </td>
+        <td>
+            <div class="tests">
+                <!-- run button to pass the code to pyodide.runPython() -->
+                <button onclick="evaluatePython()" type="button" class="">Тест</button>
+                <!-- clean the output section -->
+                <button onclick="clearHistory()" type="button" class="">CLS</button>
+            </div>
+
+        </td>
+
+    </tr>
 </table>
 
 <script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
