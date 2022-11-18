@@ -34,7 +34,9 @@ output.value = "Initializing...\n";
 
 // Add pyodide returned value to the output
 function addToOutput(stdout) {
-  output.value += ">>>\n" + stdout + "\n";
+  output.value += ">>>\n" + stdout;
+  output.scrollTop = output.scrollHeight;
+  output.value += "\n";
 }
 
 // Clean the output section
