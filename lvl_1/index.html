@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="h-full bg-slate-900" lang="ru">
+<html class="" lang="ru">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,98 +26,94 @@
   <!-- import codemirror dracula theme styles from cdn -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/dracula.css"/>
   <style>
-    /* set codemirror ide height to 100% of the textarea */
 
     body {
-      height: 100%;
       color: white;
+      background: black;
     }
 
     .CodeMirror {
       height: 100%;
+        width: 100%;
+        min-height: 800px;
+
+    }
+
+    td > div {
+      background: #202531;
+      margin: 3px;
+      padding: 3px;
+        min-width: 720px;
+    }
+
+    .ide-code {
+        height: 100%;
+        min-height: 800px;
+    }
+
+    #code {
+        height: 100%;
     }
 
     .game_window {
       width: 720px;
       height: 720px;
-      margin: 10px auto;
     }
 
-    #game_container {
-      width: 100%;
-      object-fit: scale-down;
-
-    }
-
-    #sidebar {
-      color: gray;
-      font-size: 3ch;
-      padding: 1ch;
-      position: absolute;
-    }
+    /*#game_container {*/
+    /*  width: 100%;*/
+    /*}*/
 
     #output {
       background: black;
-    }
-
-    .current_lvl {
-      color: aliceblue;
-      pointer-events: none;
+        width: 100%;
+      min-height: 200px;
     }
 
   </style>
   <title></title>
 </head>
 <body>
-<div>
 
-  <div id="sidebar">
-    <h1><a href="../index.html">Hack this game.</a></h1>
-    <h1><a href="../lvl_1/index.html">lvl_1</a></h1>
+<table>
+  <tr>
 
-    <script>
-      let lvl = window.location.pathname.split('/')[2];
-      console.log(lvl);
-      let current_lvl = $(`a[href="../${lvl}/index.html"]`);
-      current_lvl.addClass("current_lvl");
-    </script>
+    <td>
+<!--      <div>-->
 
-  </div>
-  <div id="game_container">
-    <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
-  </div>
+        <div id="game_container">
+          <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
+        </div>
+        <div>
+          <textarea readonly class="" id="output" name="output"></textarea>
+        </div>
 
-</div>
+<!--      </div>-->
+    </td>
 
-<div class="">
-  <div>
-    <!-- run button to pass the code to pyodide.runPython() -->
-    <button onclick="evaluatePython()" type="button" class="">Тест</button>
-    <!-- clean the output section -->
-    <button onclick="clearHistory()" type="button" class="">CLS</button>
-  </div>
-  <p class="">Python <span id="python_version">3</span></p>
-  <div class="">
-    <div class="">
-      <!-- our code editor, where codemirror renders it's editor -->
-      <textarea id="code" name="code" class="h-full"></textarea>
-    </div>
-    <div class="">
-      <!-- output section where we show the stdout of the python code execution -->
+    <td>
+        <div>
+            <p>Python <span id="python_version">3</span></p>
+        </div>
+        <div class="ide-code">
+            <textarea id="code" name="code" class="h-full"></textarea>
+        </div>
 
-      <textarea readonly class="" id="output" name="output"></textarea>
-    </div>
-  </div>
-<!-- Minified and statically hosted version of https://github.com/not-fl3/macroquad/blob/master/js/mq_js_bundle.js -->
-  <script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
+      <div>
+        <!-- run button to pass the code to pyodide.runPython() -->
+        <button onclick="evaluatePython()" type="button" class="">Тест</button>
+        <!-- clean the output section -->
+        <button onclick="clearHistory()" type="button" class="">CLS</button>
+      </div>
+    </td>
 
+  </tr>
+</table>
 
+<script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
 <script src="https://evgene-kopylov.github.io/js-imports.github.io/sapp_jsutils.js"></script>
 <script src="https://evgene-kopylov.github.io/js-imports.github.io/quad-url.js"></script>
-  <script>load("lvl_1.wasm");</script>
-<!--   Your compiled wasm file -->
-<!--    <script>load("../wasd_rect.wasm");</script> &lt;!&ndash; Your compiled wasm file &ndash;&gt; -->
-  <script src="python_in_browser/static/js/main.js"></script>
-</div>
+<script>load("lvl_1.wasm");</script>
+<script src="python_in_browser/static/js/main.js"></script>
 </body>
 </html>
