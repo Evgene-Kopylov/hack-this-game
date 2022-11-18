@@ -5,8 +5,8 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- install tailwindcss from cdn, don't do this for production application -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <!-- install pyodide version 0.20.0 -->
   <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
   <!-- import codemirror stylings -->
@@ -32,6 +32,8 @@
 
         --cell-width: calc(50vw - 10px);
         --bot-cell-min-heigt: 200px;
+        --ide-color: #202531;
+        --ide-border-color: #262C3B;
 
       color: rgb(173, 173, 173);
       background: black;
@@ -41,8 +43,7 @@
 
     .CodeMirror {
       height: 100%;
-        width: 100%;
-        /*min-height: var(--cell-width);*/
+      width: 100%;
 
     }
 
@@ -53,12 +54,11 @@
     td > div {
       margin-top: 4px;
       min-width: var(--cell-width);
-        border: 2px solid #262C3B;
+        border: 2px solid var(--ide-border-color);
     }
 
     .CodeMirror-scroll, td > div {
-        background: #202531;
-
+        background: var(--ide-color);
     }
 
     .ide-code {
@@ -78,6 +78,7 @@
     #output {
       background: black;
         width: 100%;
+        color: gainsboro;
     }
 
     .tests, #output {
@@ -94,13 +95,13 @@
     <tr>
         <td>
             <div>
-                <button>Описание</button>
-                <button>Игра</button>
+                <button type="button" class="btn btn-dark btn-ide">Описание</button>
+                <button type="button" class="btn btn-dark btn-ide">Игра</button>
             </div>
         </td>
         <td>
             <div>
-                <p>Python <span id="python_version">3</span></p>
+                <button type="button" class="btn btn-dark btn-ide">Python <span id="python_version">3</span></button>
             </div>
         </td>
     </tr>
@@ -123,9 +124,9 @@
         </div>
         <div class="tests">
             <!-- run button to pass the code to pyodide.runPython() -->
-            <button onclick="evaluatePython()" type="button" class="">Тест</button>
+            <button class="btn btn-dark btn-ide" onclick="evaluatePython()" type="button">Тест</button>
             <!-- clean the output section -->
-            <button onclick="clearHistory()" type="button" class="">CLS</button>
+            <button class="btn btn-dark btn-ide" onclick="clearHistory()" type="button">CLS</button>
         </div>
 
     </td>
