@@ -16,8 +16,7 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 const function_name = "unit_rotation";
 
 // set the initial value of the editor
-editor.setValue(`# import math
-import numpy as np
+editor.setValue(`import numpy as np
 
 def ${function_name}(
     target_pos: (int, int),
@@ -31,7 +30,6 @@ def ${function_name}(
     @return: угол поворота в градусах.
     """
     return np.random.randint(-180, +180)
-
 `);
 output.value = "Initializing...\n";
 
