@@ -88,7 +88,6 @@ function getParameterValue(name) {
 async function evaluatePython() {
     let target_pos = getParameterValue('target_pos');
     let unit_pos = getParameterValue('unit_pos');
-    // console.log("unit_pos = " + unit_pos);
 
     let pyodide = await pyodideReadyPromise;
     try {
@@ -113,8 +112,6 @@ print(rotation)
         let rotation = result[0];
         setParameter("rotation", rotation.toString().trim());
 
-        // let command = result[1];
-        // setParameter("command", command.toString().trim());
         setParameter("command", "Shoot");
   } catch (err) {
     addToOutput(err);
