@@ -25,7 +25,8 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- import codemirror dracula theme styles from cdn -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/dracula.css"/>
-  <style>
+  <!--suppress CssUnresolvedCustomProperty -->
+    <style>
 
     body {
 
@@ -74,20 +75,13 @@
       height: var(--cell-width);
     }
 
-    /*#game_container {*/
-    /*  width: 100%;*/
-    /*}*/
-
     #output {
       background: black;
         width: 100%;
-      min-height: var(--bot-cell-min-heigt);
     }
 
-    .tests {
-        min-height: calc(var(--bot-cell-min-heigt) + 5px);
-
-
+    .tests, #output {
+        min-height: var(--bot-cell-min-heigt);
     }
 
   </style>
@@ -114,14 +108,12 @@
   <tr>
 
     <td>
-<!--      <div>-->
-
-        <div id="game_container">
+        <div>
           <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
         </div>
-
-
-<!--      </div>-->
+        <div>
+            <textarea readonly class="" id="output" name="output"></textarea>
+        </div>
     </td>
 
     <td>
@@ -129,28 +121,16 @@
         <div class="ide-code">
             <textarea id="code" name="code" class="h-full"></textarea>
         </div>
-
+        <div class="tests">
+            <!-- run button to pass the code to pyodide.runPython() -->
+            <button onclick="evaluatePython()" type="button" class="">Тест</button>
+            <!-- clean the output section -->
+            <button onclick="clearHistory()" type="button" class="">CLS</button>
+        </div>
 
     </td>
 
   </tr>
-    <tr>
-        <td>
-            <div>
-                <textarea readonly class="" id="output" name="output"></textarea>
-            </div>
-        </td>
-        <td>
-            <div class="tests">
-                <!-- run button to pass the code to pyodide.runPython() -->
-                <button onclick="evaluatePython()" type="button" class="">Тест</button>
-                <!-- clean the output section -->
-                <button onclick="clearHistory()" type="button" class="">CLS</button>
-            </div>
-
-        </td>
-
-    </tr>
 </table>
 
 <script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
