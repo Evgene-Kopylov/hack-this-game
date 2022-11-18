@@ -77,6 +77,8 @@
 
     #task_wnd {
         display: none;
+        min-width: var(--cell-width);
+        min-height: var(--cell-width);
     }
 
     #output {
@@ -118,7 +120,14 @@
           <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
         </div>
         <div id="task_wnd">
-            <p>Описание задачи</p>
+            <h4>Описание задачи</h4>
+            <p>Попади в мишень.</p>
+            <p>Известны положения юникта и мишени в системе координат.</p>
+            <p>Можно использовать страндартные библиотеки Python и numpy.</p>
+            <p>Можно управлять вручную. WASD, ← → ↑ ↓, мышка.</p>
+            <p></p>
+            <p></p>
+            <p></p>
         </div>
         <div>
             <textarea readonly class="" id="output" name="output"></textarea>
@@ -132,7 +141,7 @@
         </div>
         <div class="tests">
             <!-- run button to pass the code to pyodide.runPython() -->
-            <button class="btn btn-dark btn-ide" onclick="evaluatePython()" type="button">Тест</button>
+            <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow(); evaluatePython();">Тест</button>
             <!-- clean the output section -->
             <button class="btn btn-dark btn-ide" onclick="clearHistory()" type="button">CLS</button>
         </div>
