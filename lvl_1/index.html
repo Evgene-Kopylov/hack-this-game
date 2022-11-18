@@ -30,6 +30,7 @@
 
     body {
       height: 100%;
+      color: white;
     }
 
     .CodeMirror {
@@ -53,6 +54,10 @@
       font-size: 3ch;
       padding: 1ch;
       position: absolute;
+    }
+
+    #output {
+      background: black;
     }
 
     .current_lvl {
@@ -84,23 +89,23 @@
 
 </div>
 
-<div class="h-full overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+<div class="">
   <div>
     <!-- run button to pass the code to pyodide.runPython() -->
-    <button onclick="evaluatePython()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-green-700 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 text-slate-300">Run</button>
+    <button onclick="evaluatePython()" type="button" class="">Тест</button>
     <!-- clean the output section -->
-    <button onclick="clearHistory()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-red-700 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 text-slate-300">Clear History</button>
+    <button onclick="clearHistory()" type="button" class="">CLS</button>
   </div>
-  <p class="text-slate-200 text-3xl my-4 mx-2 pt-8">Python <span id="python_version">3</span></p>
-  <div class="h-3/4 flex flex-row">
-    <div class="grid w-2/3 border-dashed border-2 border-slate-500 mx-2">
+  <p class="">Python <span id="python_version">3</span></p>
+  <div class="">
+    <div class="">
       <!-- our code editor, where codemirror renders it's editor -->
       <textarea id="code" name="code" class="h-full"></textarea>
     </div>
-    <div class="grid border-dashed border-2 border-slate-500 mx-2">
+    <div class="">
       <!-- output section where we show the stdout of the python code execution -->
 
-      <textarea readonly class="p-6 text-slate-200 bg-slate-900" id="output" name="output"></textarea>
+      <textarea readonly class="" id="output" name="output"></textarea>
     </div>
   </div>
 <!-- Minified and statically hosted version of https://github.com/not-fl3/macroquad/blob/master/js/mq_js_bundle.js -->
