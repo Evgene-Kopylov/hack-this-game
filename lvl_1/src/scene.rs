@@ -7,13 +7,11 @@ use crate::projectile::Projectile;
 use crate::assets::Assets;
 use crate::order::Order;
 use crate::utils::get_parameter_value;
-use crate::wall::WallBlock;
 
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
     projectiles: Vec<Projectile>,
-    wall_block: WallBlock,
     mouse_position: Vec2,
     dt: f32,
     assets: Assets,
@@ -43,12 +41,6 @@ impl Scene {
                 target_unit_position
             ),
             projectiles: Vec::new(),
-            wall_block: WallBlock::new(
-                assets.wall_block_texture,
-                assets.wall_block_impact_sound,
-                Vec2::new(target_unit_position.x, target_unit_position.y - 150.),
-                0.,
-            ),
             mouse_position,
             dt,
             assets,
@@ -167,19 +159,20 @@ impl Scene {
 
         for i in 0..self.projectiles.len() {
             let p = &mut self.projectiles[i];
-            let wall = &self.wall_block;
-
-            if p.position.x > wall.position.x - 0.5 * wall.size.x
-            && p.position.x < wall.position.x + 0.5 * wall.size.x
-            && p.position.y > wall.position.y - 0.5 * wall.size.y
-            && p.position.y < wall.position.y + 0.5 * wall.size.y
-            {
-                p.alive = false;
-                self.wall_block.update(
-                    true,
-                )
-
-            } else if (p.position.x - self.target_unit.position.x).powf(2f32) +
+            // let wall = &self.wall_block;
+            //
+            // if p.position.x > wall.position.x - 0.5 * wall.size.x
+            // && p.position.x < wall.position.x + 0.5 * wall.size.x
+            // && p.position.y > wall.position.y - 0.5 * wall.size.y
+            // && p.position.y < wall.position.y + 0.5 * wall.size.y
+            // {
+            //     p.alive = false;
+            //     self.wall_block.update(
+            //         true,
+            //     )
+            //
+            // } else
+            if (p.position.x - self.target_unit.position.x).powf(2f32) +
                 (p.position.y - self.target_unit.position.y).powf(2f32)
                 < self.target_unit.radius.powf(2f32) {
                 p.alive = false;
@@ -197,13 +190,13 @@ impl Scene {
 
     pub fn draw(&self) {
         self.target_unit.draw_shadow();
-        self.wall_block.draw_shadow();
+        // self.wall_block.draw_shadow();
         self.main_unit.draw();
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();
         }
         self.target_unit.draw();
-        self.wall_block.draw()
+        // self.wall_block.draw()
     }
 
 }
