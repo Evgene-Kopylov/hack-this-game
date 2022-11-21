@@ -29,10 +29,10 @@ def ${function_name}(
     @param unit_pos: координаты юнита 
     @return: угол поворота в градусах.
     """
-    dx = target_pos[0] - unit_pos[0]
-    dy = target_pos[1] - unit_pos[1]
-
-    return 180 - np.rad2deg(np.arctan2(dx, dy))
+    
+    ### Вставьте вашь код сюда
+    
+    return 0
 `);
 output.value = "Initializing...\n";
 
