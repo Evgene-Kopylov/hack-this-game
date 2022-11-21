@@ -29,7 +29,10 @@ def ${function_name}(
     @param unit_pos: координаты юнита 
     @return: угол поворота в градусах.
     """
-    return np.random.randint(-180, +180)
+    dx = target_pos[0] - unit_pos[0]
+    dy = target_pos[1] - unit_pos[1]
+
+    return 180 - np.rad2deg(np.arctan2(dx, dy))
 `);
 output.value = "Initializing...\n";
 
@@ -84,14 +87,28 @@ function getParameterValue(name) {
     return decodeURI(urlParams.get(name));
 }
 
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // pass the editor value to the pyodide.runPython function and show the result in the output section
-async function evaluatePython() {
+async function evaluatePython(test = 'all') {
     let target_pos = getParameterValue('target_pos');
     let unit_pos = getParameterValue('unit_pos');
 
     let pyodide = await pyodideReadyPromise;
     try {
-        pyodide.runPython(`    
+        test_positions = [
+            '(100, 100)',
+            '(136, 175)',
+            '(489, 204)'
+        ]
+        test_positions.push(unit_pos);
+
+        for (unit_pos of test_positions) {
+            console.log(unit_pos)
+            pyodide.runPython(`    
 import io
 sys.stdout = io.StringIO()
 
@@ -105,14 +122,21 @@ rotation = ${function_name}(target_pos, unit_pos)
 print(rotation)
 # print(command)
         `);
-        let stdout = pyodide.runPython("sys.stdout.getvalue()");
-        let result = stdout.toString().trim().split("\n")
-        addToOutput(`>>> ${function_name}(${target_pos}, ${unit_pos})\n` + stdout);
 
-        let rotation = result[0];
-        setParameter("rotation", rotation.toString().trim());
 
-        setParameter("command", "Shoot");
+            let stdout = pyodide.runPython("sys.stdout.getvalue()");
+
+            let result = stdout.toString().trim().split("\n")
+            addToOutput(`>>> ${function_name}(${target_pos}, ${unit_pos})\n` + stdout);
+
+            let rotation = result[0];
+            setParameter("unit_position_x", unit_pos.replace('(', '').replace(')', '').split(', ')[0]);
+            setParameter("unit_position_y", unit_pos.replace('(', '').replace(')', '').split(', ')[1]);
+            setParameter("rotation", rotation.toString().trim());
+
+            setParameter("command", "Shoot");
+            await sleep(1500);
+        };
   } catch (err) {
     addToOutput(err);
   }

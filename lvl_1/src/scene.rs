@@ -96,6 +96,8 @@ impl Scene {
         match get_parameter_value("command") == String::from("Shoot") {
             true => {
                 self.order.shoot = true;
+                self.main_unit.position.x = get_parameter_value("unit_position_x").parse().unwrap();
+                self.main_unit.position.y = get_parameter_value("unit_position_y").parse().unwrap();
                 set_program_parameter("command", "");
                 self.main_unit.shoot_timer = 1.;  // чтобы получить выстрел с минимальной задержкой
                 self.main_unit.auto_aim = true;
@@ -183,7 +185,7 @@ impl Scene {
                 p.alive = false;
                 self.target_unit.update(
                     true,
-                    -10.,
+                    -5.,
                     p.rotation,
                 );
                 info!("target_unit.hit_points: {:?}", self.target_unit.hit_points);
