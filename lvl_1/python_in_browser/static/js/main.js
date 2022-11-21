@@ -101,7 +101,8 @@ async function evaluatePython(test = 'all') {
     try {
         test_positions = [
             '(100, 100)',
-            '(136, 175)',
+            '(136, 275)',
+            '(430, 361)',
             '(489, 204)'
         ]
         test_positions.push(unit_pos);
