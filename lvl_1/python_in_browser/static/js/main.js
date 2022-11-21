@@ -16,8 +16,7 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 const function_name = "unit_rotation";
 
 // set the initial value of the editor
-editor.setValue(`import numpy as np
-
+editor.setValue(`
 def ${function_name}(
     target_pos: (int, int),
     unit_pos: (int, int)

@@ -138,10 +138,14 @@
                 <div style="background: #242424">
                     <pre>
                         <code>
-                            dx = target_pos[0] - unit_pos[0]
-                            dy = target_pos[1] - unit_pos[1]
+    import numpy as np
+    ...
+    ...
 
-                            return 180 - np.rad2deg(np.arctan2(dx, dy))
+    dx = target_pos[0] - unit_pos[0]
+    dy = target_pos[1] - unit_pos[1]
+
+    return 180 - np.rad2deg(np.arctan2(dx, dy))
                         </code>
                     </pre>
                 </div>
