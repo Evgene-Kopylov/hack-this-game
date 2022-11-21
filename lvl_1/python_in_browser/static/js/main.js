@@ -135,7 +135,7 @@ print(rotation)
             setParameter("rotation", rotation.toString().trim());
 
             setParameter("command", "Shoot");
-            await sleep(1500);
+            await sleep(1000);
         };
   } catch (err) {
     addToOutput(err);
