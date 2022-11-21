@@ -92,6 +92,11 @@
         min-height: var(--bot-cell-min-heigt);
     }
 
+    .btn-ide {
+        background: #464D56;
+        color: cadetblue;
+    }
+
   </style>
   <title></title>
 </head>
@@ -108,7 +113,8 @@
         </td>
         <td>
             <div>
-                <button type="button" class="btn btn-dark btn-ide">Python <span id="python_version">3</span></button>
+                <!-- clean the output section -->
+                <button type="button" class="btn btn-dark btn-ide" onclick="clearHistory()">Python <span id="python_version">3</span></button>
             </div>
         </td>
     </tr>
@@ -164,9 +170,11 @@
         </div>
         <div class="tests">
             <!-- run button to pass the code to pyodide.runPython() -->
-            <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow(); evaluatePython();">Тест</button>
+            <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow(); evaluatePython();">
+                ▶︎ Тест
+            </button>
             <!-- clean the output section -->
-            <button class="btn btn-dark btn-ide" onclick="clearHistory()" type="button">CLS</button>
+<!--            <button class="btn btn-dark btn-ide" onclick="clearHistory()" type="button">CLS</button>-->
         </div>
 
     </td>
