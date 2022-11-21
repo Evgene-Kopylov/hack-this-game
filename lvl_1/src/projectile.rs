@@ -6,9 +6,9 @@ use crate::settings::*;
 pub struct Projectile {
     pub texture: Texture2D,
     pub rotation: f32,
-    pub start_position: (f32, f32),
-    pub position: (f32, f32),
-    pub size: (f32, f32),
+    pub start_position: Vec2,
+    pub position: Vec2,
+    pub size: Vec2,
     pub speed: f32,
     pub alive: bool,
 
@@ -20,7 +20,7 @@ impl Projectile {
         texture: Texture2D,
         shoot_sound: Sound,
         rotation: f32,
-        position: (f32, f32),
+        position: Vec2,
         speed: f32
     ) -> Self {
 
@@ -28,7 +28,7 @@ impl Projectile {
         sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
         audio::play_sound(shoot_sound, sound_params);
 
-        let size = (texture.width(), texture.height());
+        let size = Vec2::new(texture.width(), texture.height());
         Self {
             texture,
             rotation,
@@ -41,18 +41,18 @@ impl Projectile {
     }
 
     pub fn update(&mut self, dt: f32) {
-        self.position.0 += dt * self.speed * (self.rotation - f32::to_radians(90.)).cos();
-        self.position.1 += dt * self.speed * (self.rotation - f32::to_radians(90.)).sin();
+        self.position.x += dt * self.speed * (self.rotation - f32::to_radians(90.)).cos();
+        self.position.y += dt * self.speed * (self.rotation - f32::to_radians(90.)).sin();
     }
     
     pub fn draw(&self) {
         draw_texture_ex(
             self.texture,
-            self.position.0 - self.size.0 * 0.50,
-            self.position.1 - self.size.1 * 0.50,
+            self.position.x - self.size.x * 0.50,
+            self.position.y - self.size.y * 0.50,
             PROJECTILE_COLOR,
             DrawTextureParams {
-                dest_size: Some(Vec2::new(self.size .0, self.size.1)),
+                dest_size: Some(Vec2::new(self.size.x, self.size.y)),
                 rotation: self.rotation,
                 ..Default::default()
             }

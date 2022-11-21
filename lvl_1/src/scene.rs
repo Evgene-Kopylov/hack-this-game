@@ -1,6 +1,5 @@
 use macroquad::input::{is_key_down, KeyCode};
-use macroquad::miniquad::info;
-use macroquad::prelude::{mouse_position, screen_height, screen_width, Vec2};
+use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2};
 use macroquad::time::get_frame_time;
 use quad_url::set_program_parameter;
 use crate::{MainUnit, TargetUnit};
@@ -8,11 +7,13 @@ use crate::projectile::Projectile;
 use crate::assets::Assets;
 use crate::order::Order;
 use crate::utils::get_parameter_value;
+use crate::wall::WallBlock;
 
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
     projectiles: Vec<Projectile>,
+    wall_block: WallBlock,
     mouse_position: Vec2,
     dt: f32,
     assets: Assets,
@@ -22,8 +23,8 @@ pub struct Scene {
 
 impl Scene {
     pub async fn new() -> Self {
-        let spawn_position = (screen_width() * 0.5, screen_height() * 0.8);
-        let target_unit_position = (screen_width() * 0.5, 160.);
+        let spawn_position = Vec2::new(screen_width() * 0.5, screen_height() * 0.8);
+        let target_unit_position = Vec2::new(screen_width() * 0.5, 160.);
 
 
         let mouse_position: Vec2 = mouse_position().into();
@@ -42,6 +43,12 @@ impl Scene {
                 target_unit_position
             ),
             projectiles: Vec::new(),
+            wall_block: WallBlock::new(
+                assets.wall_block_texture,
+                assets.wall_block_impact_sound,
+                Vec2::new(screen_width() * 0.5, screen_height() * 0.5),
+                0.,
+            ),
             mouse_position,
             dt,
             assets,
@@ -69,17 +76,17 @@ impl Scene {
             y_move += 1f32;
         }
 
-        if self.main_unit.position.0 < 1f32 {
+        if self.main_unit.position.x < 1f32 {
             x_move = 1f32;
         }
-        if self.main_unit.position.0 > screen_width() {
+        if self.main_unit.position.x > screen_width() {
             x_move = -1f32;
         }
 
-        if self.main_unit.position.1 < 1f32 {
+        if self.main_unit.position.y < 1f32 {
             y_move = 1f32;
         }
-        if self.main_unit.position.1 > screen_height() {
+        if self.main_unit.position.y > screen_height() {
             y_move = -1f32;
         }
         self.order.wasd = Vec2::new(x_move, y_move);
@@ -100,21 +107,43 @@ impl Scene {
             Ok(a) => {
                 self.order.rotation = a.to_radians();
             }
-            Err(e) => {
-                info!("{}", e);
+            Err(_) => {
+                // info!("{}", _e);
             }
         }
 
     }
 
     fn set_parameters_to_url_query(&mut self) {
-        let line = format!("({}, {})", self.target_unit.position.0 as i32, self.target_unit.position.1 as i32);
+        let line = format!("({}, {})", self.target_unit.position.x as i32, self.target_unit.position.y as i32);
         set_program_parameter("target_pos", line.as_str());
-        let line = format!("({}, {})", self.main_unit.position.0 as i32, self.main_unit.position.1 as i32);
+        let line = format!("({}, {})", self.main_unit.position.x as i32, self.main_unit.position.y as i32);
         set_program_parameter("unit_pos", line.as_str());
     }
 
+    // fn get_parameters(&self) -> Vec2 {
+    //     let mut x = 0;
+    //     let mut y = 0;
+    //     match get_parameter_value("move_x").parse::<i32>() {
+    //         Ok(_x) => {
+    //             info!("x: {:?}", _x);
+    //             x = _x;
+    //         },
+    //         Err(_) => {}
+    //     }
+    //     match get_parameter_value("move_y").parse::<i32>() {
+    //         Ok(_y) => {
+    //             info!("x: {:?}", _y);
+    //             y = _y;
+    //         },            Err(_) => {}
+    //     }
+    //     Vec2::new(x as f32, y as f32)
+    //
+    // }
+
     pub fn update(&mut self) {
+        // let move_command = self.get_parameters();
+        // info!("{:?}", move_command);
         self.tick += self.dt;
         self.update_order_from_user_input();
 
@@ -124,7 +153,7 @@ impl Scene {
             self.update_order_from_url_query();
         }
         self.dt = get_frame_time();
-        self.target_unit.shift = (0., 0.);
+        self.target_unit.shift = Vec2::new(0., 0.);
         self.mouse_position = mouse_position().into();
 
         self.main_unit.update(
@@ -133,9 +162,9 @@ impl Scene {
             &mut self.order,
         );
         if self.order.shoot {
-            let position = (  // точка появления выстрела
-                self.main_unit.position.0 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).cos(),
-                self.main_unit.position.1 + 65. * (self.main_unit.rotation - f32::to_radians(90.)).sin()
+            let position = Vec2::new(  // точка появления выстрела
+                self.main_unit.position.x + 65. * (self.main_unit.rotation - f32::to_radians(90.)).cos(),
+                self.main_unit.position.y + 65. * (self.main_unit.rotation - f32::to_radians(90.)).sin()
             );
 
             let projectile = Projectile::new(
@@ -148,34 +177,52 @@ impl Scene {
             self.projectiles.push(projectile);
         }
 
-        // удаление снарядов на отлете
+        // удаление объектов
+        // снаряды на отлете
         self.projectiles.retain(|p|
-                ((p.start_position.0 - p.position.0).powf(2f32)
-                    + (p.start_position.1 - p.position.1).powf(2f32)
+                ((p.start_position.x - p.position.x).powf(2f32)
+                    + (p.start_position.y - p.position.y).powf(2f32)
                     < self.main_unit.shoot_range.powf(2f32)) && p.alive);
 
         for i in 0..self.projectiles.len() {
-            if (self.projectiles[i].position.0 - self.target_unit.position.0).powf(2f32) +
-                (self.projectiles[i].position.1 - self.target_unit.position.1).powf(2f32)
+            let p = &mut self.projectiles[i];
+            let wall = &self.wall_block;
+
+            if p.position.x > wall.position.x - 0.5 * wall.size.x
+            && p.position.x < wall.position.x + 0.5 * wall.size.x
+            && p.position.y > wall.position.y - 0.5 * wall.size.y
+            && p.position.y < wall.position.y + 0.5 * wall.size.y
+            {
+                p.alive = false;
+                self.wall_block.update(
+                    true,
+                )
+
+            } else if (p.position.x - self.target_unit.position.x).powf(2f32) +
+                (p.position.y - self.target_unit.position.y).powf(2f32)
                 < self.target_unit.radius.powf(2f32) {
-                self.projectiles[i].alive = false;
+                p.alive = false;
                 self.target_unit.update(
                     true,
-                    self.projectiles[i].rotation,
+                    -10.,
+                    p.rotation,
                 );
+                info!("target_unit.hit_points: {:?}", self.target_unit.hit_points);
             }
 
-            self.projectiles[i].update(self.dt);
+            p.update(self.dt);
         }
     }
 
     pub fn draw(&self) {
         self.target_unit.draw_shadow();
+        self.wall_block.draw_shadow();
         self.main_unit.draw();
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();
         }
         self.target_unit.draw();
+        self.wall_block.draw()
     }
 
 }
