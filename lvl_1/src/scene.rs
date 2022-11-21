@@ -185,7 +185,7 @@ impl Scene {
                 p.alive = false;
                 self.target_unit.update(
                     true,
-                    -5.,
+                    -20.,
                     p.rotation,
                 );
                 info!("target_unit.hit_points: {:?}", self.target_unit.hit_points);
