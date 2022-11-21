@@ -10,8 +10,6 @@ pub(crate) struct Assets {
     pub(crate) target_unit_texture: Texture2D,
     pub(crate) target_unit_shadow_texture: Texture2D,
     pub(crate) projectile_texture: Texture2D,
-    pub(crate) wall_block_texture: Texture2D,
-    pub(crate) wall_block_impact_sound: Sound,
 }
 
 impl Assets {
@@ -29,10 +27,6 @@ impl Assets {
             "../assets/pointer/target_unit_3_shadow.png").await.unwrap();
         let projectile_texture = load_texture(
             "../assets/pointer/projectile_glow_7.png").await.unwrap();
-        let wall_block_texture = load_texture(
-            "../assets/wall/wall_50x15.png").await.unwrap();
-        let wall_block_impact_sound: Sound = load_sound(
-            "../assets/sound/hit-with-something.wav").await.unwrap();
         info!("WASM LOG: Текстуры загружены");
 
         Self {
@@ -42,8 +36,6 @@ impl Assets {
             target_unit_texture,
             target_unit_shadow_texture,
             projectile_texture,
-            wall_block_texture,
-            wall_block_impact_sound,
         }
     }
 }
