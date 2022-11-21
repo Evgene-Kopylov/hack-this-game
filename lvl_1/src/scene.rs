@@ -46,7 +46,7 @@ impl Scene {
             wall_block: WallBlock::new(
                 assets.wall_block_texture,
                 assets.wall_block_impact_sound,
-                Vec2::new(screen_width() * 0.5, screen_height() * 0.5),
+                Vec2::new(target_unit_position.x, target_unit_position.y - 150.),
                 0.,
             ),
             mouse_position,
