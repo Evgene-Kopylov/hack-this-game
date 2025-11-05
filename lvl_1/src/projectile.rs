@@ -24,9 +24,11 @@ impl Projectile {
         speed: f32
     ) -> Self {
 
-        let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-        sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
-        audio::play_sound(shoot_sound, sound_params);
+        let sound_params: PlaySoundParams = PlaySoundParams {
+            looped: false,
+            volume: MAIN_UNIT_SHOOT_SOUND_VOLUME,
+        };
+        audio::play_sound(&shoot_sound, sound_params);
 
         let size = Vec2::new(texture.width(), texture.height());
         Self {
@@ -47,7 +49,7 @@ impl Projectile {
     
     pub fn draw(&self) {
         draw_texture_ex(
-            self.texture,
+            &self.texture,
             self.position.x - self.size.x * 0.50,
             self.position.y - self.size.y * 0.50,
             PROJECTILE_COLOR,

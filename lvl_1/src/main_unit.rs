@@ -7,8 +7,8 @@ use crate::settings::*;
 pub struct MainUnit {
     pub texture: Texture2D,
     pub size: Vec2,
-    pub scale: f32,
-    pub radius: f32,
+    pub _scale: f32,
+    pub _radius: f32,
     pub rotation: f32,
     pub position: Vec2,
     pub speed: f32,
@@ -26,11 +26,11 @@ impl MainUnit {
         position: Vec2,
     ) -> Self {
         Self {
-            texture,
+            texture: texture.clone(),
             position,
             size: Vec2::new(texture.width(), texture.height()),
-            scale: 1.,
-            radius: f32::max(texture.width(), texture.height()),
+            _scale: 1.,
+            _radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
             speed: MAIN_UNIT_SPEED,
             shoot_timer: 0.,
@@ -99,7 +99,7 @@ impl MainUnit {
     pub fn draw(&self) {
         // тень
         draw_texture_ex(
-            self.texture,
+            &self.texture,
             self.position.x - self.size.x * 0.5 + 3.,
             self.position.y - self.size.y * 0.5 + 4.,
             DARKGRAY,
@@ -111,7 +111,7 @@ impl MainUnit {
         );
         // сам юнит
         draw_texture_ex(
-            self.texture,
+            &self.texture,
             self.position.x - self.size.x * 0.5,
             self.position.y - self.size.y * 0.5,
             UNIT_COLOR,

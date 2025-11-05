@@ -31,13 +31,13 @@ impl Scene {
 
         Self {
             main_unit: MainUnit::new(
-                assets.main_unit_texture,
+                assets.main_unit_texture.clone(),
                 spawn_position
             ),
             target_unit: TargetUnit::new(
-                assets.target_unit_texture,
-                assets.target_unit_shadow_texture,
-                assets.target_impact_sound,
+                assets.target_unit_texture.clone(),
+                assets.target_unit_shadow_texture.clone(),
+                assets.target_impact_sound.clone(),
                 target_unit_position
             ),
             projectiles: Vec::new(),
@@ -141,8 +141,8 @@ impl Scene {
             );
 
             let projectile = Projectile::new(
-                self.assets.projectile_texture,
-                self.assets.main_unit_shoot_sound,
+                self.assets.projectile_texture.clone(),
+                self.assets.main_unit_shoot_sound.clone(),
                 self.main_unit.rotation,
                 position,
                 self.main_unit.speed * 3.,

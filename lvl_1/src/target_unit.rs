@@ -23,7 +23,7 @@ impl TargetUnit {
         color.a = 0.45;
 
         Self {
-            texture,
+            texture: texture.clone(),
             shadow_texture,
             color,
             position: spawn_position,
@@ -45,15 +45,17 @@ impl TargetUnit {
 
             let shift = 5.;
             self.shift = Vec2::new(shift * impact_angle.sin(), shift * impact_angle.cos());
-            let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-            sound_params.volume = TARGET_UNIT_IMPACT_SOUND_VOLUME;
+            let mut sound_params: PlaySoundParams = PlaySoundParams{
+                looped: false,
+                volume: TARGET_UNIT_IMPACT_SOUND_VOLUME,
+            };
 
             if self.alive {
-                audio::play_sound(self.impact_sound, sound_params);
+                audio::play_sound(&self.impact_sound, sound_params);
             } else {
                 self.shift *= 0.4;
                 sound_params.volume *= 0.25;
-                audio::play_sound(self.impact_sound, sound_params);
+                audio::play_sound(&self.impact_sound, sound_params);
             }
 
         }
@@ -68,7 +70,7 @@ impl TargetUnit {
         }
 
         draw_texture_ex(
-            self.texture,
+            &self.texture,
             self.position.x - self.texture.width() * 0.5 + self.shift.x,
             self.position.y - self.texture.height() * 0.5 - self.shift.y,
             color,
@@ -82,7 +84,7 @@ impl TargetUnit {
         // тень
         let height = 3.;
         draw_texture_ex(
-            self.shadow_texture,
+            &self.shadow_texture,
             self.position.x - self.texture.width() * 0.5 + 3. * height,
             self.position.y - self.texture.height() * 0.5 + 4. * height,
             self.color,
